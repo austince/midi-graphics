@@ -1,22 +1,20 @@
 package me.austince.examples;
 
-import me.austince.animation.AnimatedCanvas;
-import me.austince.rasterizer.PolyRasterizer;
-import me.austince.shapes.Rectangle;
+import me.austince.animation.AnimatedPolyCanvas;
+import me.austince.polyshapes.PolyRectangle;
 import org.jdesktop.core.animation.timing.Animator;
 
 import java.awt.*;
-import java.util.Date;
 
 /**
  * Created by austin on 3/7/17.
  */
-public class SquareAnimationCanvas extends AnimatedCanvas {
-    private Rectangle rect;
+public class SquareAnimationPolyCanvas extends AnimatedPolyCanvas {
+    private PolyRectangle rect;
     private Point direction;
 
-    public SquareAnimationCanvas() {
-        this.rect = new Rectangle(
+    public SquareAnimationPolyCanvas() {
+        this.rect = new PolyRectangle(
                 this.getWidth() / 2,
                 this.getHeight() / 2
         );
@@ -25,8 +23,12 @@ public class SquareAnimationCanvas extends AnimatedCanvas {
         this.rect.setColor(new Color(1.0f, 0.0f, 0.0f));
 
         this.addPolyShape(this.rect);
+        this.setShowClipWindow(true);
 
         this.direction = new Point(50, 0);
+
+        this.setClipperBounds(200, 50, this.getWidth() - 1, this.getHeight() - 1);
+
     }
 
     private void update(double v) {
@@ -36,6 +38,7 @@ public class SquareAnimationCanvas extends AnimatedCanvas {
         } else if (direction.x < 0 && this.rect.getMinX() + direction.x < 0) {
             direction.x = Math.abs(direction.x);
         }
+
         Point translation = new Point(
                 (int) (direction.x * v),
                 (int) (direction.y * v)

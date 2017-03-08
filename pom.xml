@@ -27,6 +27,11 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>org.jfugue</groupId>-->
+            <!--<artifactId>jfugue</artifactId>-->
+            <!--<version>4.0.0</version>-->
+        <!--</dependency>-->
     </dependencies>
 
 

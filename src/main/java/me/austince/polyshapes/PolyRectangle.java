@@ -1,13 +1,13 @@
-package me.austince.shapes;
+package me.austince.polyshapes;
 
 import java.awt.*;
 
 /**
  * Created by austin on 3/7/17.
  */
-public class Rectangle extends PolyShape {
+public class PolyRectangle extends PolyShape {
 
-    public Rectangle(int width, int height) {
+    public PolyRectangle(int width, int height) {
         super(new Point[] {
                 new Point(0, 0),
                 new Point(width, 0),

@@ -9,6 +9,7 @@ package me.austince.rasterizer;
 
 import me.austince.canvas.SimpleCanvas;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -23,10 +24,10 @@ public class PolyRasterizer {
 
     /**
      *
-     * @param n number of scanlines
+     * @param numScanlines number of scanlines
      */
-    public PolyRasterizer (int n) {
-        this.nScanlines = n;
+    public PolyRasterizer (int numScanlines) {
+        this.nScanlines = numScanlines;
     }
 
     /**
@@ -36,21 +37,13 @@ public class PolyRasterizer {
      // x and y arrays.  The ith vertex will have coordinate  (x[i], y[i])
      // You are to add the implementation here using only calls
      // to C.setPixel()
-     * @param numVerts number of vertices
-     * @param xs list of x coords
-     * @param ys list of y coords
+     * @param vertices a list of verticies
      * @param canvas canvas to draw on
      */
-    public void drawPolygon(int numVerts, int[] xs, int[] ys, SimpleCanvas canvas) {
-        // Put the vertices in pairs to make life easier
-        int[][] vertices = new int[numVerts][2];
-        for (int i = 0; i < numVerts; i++) {
-            vertices[i][0] = xs[i];
-            vertices[i][1] = ys[i];
-        }
+    public void drawPolygon(Point[] vertices, SimpleCanvas canvas) {
 
         // ET
-        ArrayList<EdgeBucket>[] edgeTable = this.buildEdgeTable(numVerts, vertices);
+        ArrayList<EdgeBucket>[] edgeTable = this.buildEdgeTable(vertices);
         // AEL
         ArrayList<EdgeBucket> activeEdgeList = new ArrayList<>();
 
@@ -120,15 +113,15 @@ public class PolyRasterizer {
         }
     }
 
-    private ArrayList<EdgeBucket>[] buildEdgeTable(int numVerts, int[][] vertices) {
+    private ArrayList<EdgeBucket>[] buildEdgeTable(Point[] vertices) {
         // Should only allocate enough space for yMax - yMin, but that'll be for later
         ArrayList<EdgeBucket>[] edgeTable = new ArrayList[this.nScanlines];
-
+        int numVerts = vertices.length;
         // Build from lowest y to highest
         for (int i = 0; i < numVerts; i++) {
 //            edgeTable.add(new EdgeBucket(xs[i], ));
-            int[] startV = vertices[i];
-            int[] endV;
+            Point startV = vertices[i];
+            Point endV;
 
             if (i == numVerts - 1) {
                 // Wrap around for second vertex if we've reached the end
@@ -138,31 +131,31 @@ public class PolyRasterizer {
             }
 
             // Always position vertices from left to right
-            if (endV[0] < startV[0]) {
+            if (endV.getX() < startV.getX()) {
                 // swap
-                int[] temp = startV;
+                Point temp = startV;
                 startV = endV;
                 endV = temp;
             }
 
             // Calculate the bucket contents
-            int dy = endV[1] - startV[1];
+            int dy = endV.y - startV.y;
             // Ignore horizontal edges
             if (dy == 0) {
                 continue;
             }
 
-            int dx = endV[0] - startV[0];
+            int dx = endV.x - startV.x;
             // x is the x of the yMin
             int yMax, yMin, x;
-            if (startV[1] >= endV[1]) {
-                yMin = endV[1];
-                yMax = startV[1];
-                x = endV[0];
+            if (startV.y >= endV.y) {
+                yMin = endV.y;
+                yMax = startV.y;
+                x = endV.x;
             } else {
-                yMin = startV[1];
-                yMax = endV[1];
-                x = startV[0];
+                yMin = startV.y;
+                yMax = endV.y;
+                x = startV.x;
             }
 
             EdgeBucket newBucket = new EdgeBucket(yMax, x, dx, dy);

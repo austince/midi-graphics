@@ -1,8 +1,6 @@
 package me.austince.animation;
 
 import me.austince.canvas.PolyCanvas;
-import me.austince.canvas.SimpleCanvas;
-import me.austince.shapes.PolyShape;
 import org.jdesktop.core.animation.timing.Animator;
 import org.jdesktop.core.animation.timing.TimingTarget;
 
@@ -11,45 +9,45 @@ import java.util.Date;
 /**
  * Created by austin on 3/1/17.
  */
-public class AnimatedCanvas extends PolyCanvas implements TimingTarget {
+public class AnimatedPolyCanvas extends PolyCanvas implements TimingTarget {
     public Date animationStart;
 
-
-    public AnimatedCanvas() {
+    public AnimatedPolyCanvas() {
         super();
     }
 
-    public AnimatedCanvas(int width, int height) {
+    public AnimatedPolyCanvas(int width, int height) {
         super(width, height);
     }
 
     @Override
     public void begin(Animator animator) {
-        System.out.println("AnimatedCanvas.begin");
+        System.out.println("AnimatedPolyCanvas.begin");
         animationStart = new Date();
     }
 
     @Override
     public void end(Animator animator) {
-        System.out.println("AnimatedCanvas.end");
+        System.out.println("AnimatedPolyCanvas.end");
     }
 
     @Override
     public void repeat(Animator animator) {
-//        System.out.println("AnimatedCanvas.repeat");
+//        System.out.println("AnimatedPolyCanvas.repeat");
     }
 
     @Override
     public void reverse(Animator animator) {
-//        System.out.println("AnimatedCanvas.reverse");
+//        System.out.println("AnimatedPolyCanvas.reverse");
     }
 
     @Override
     public void timingEvent(Animator animator, double v) {
-//        System.out.println("AnimatedCanvas.timingEvent");
+//        System.out.println("AnimatedPolyCanvas.timingEvent");
 //        System.out.println("animator = [" + animator + "], v = [" + v + "]");
         // Reset the background
         this.clear();
+        // Repaint the changes
         repaint();
     }
 }

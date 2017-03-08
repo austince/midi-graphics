@@ -23,10 +23,10 @@ public class LineRasterizer {
 
     /**
      *
-     * @param n number of scanlines
+     * @param numScanlines number of scanlines
      */
-    public LineRasterizer(int n) {
-        this.nScanlines = n;
+    public LineRasterizer(int numScanlines) {
+        this.nScanlines = numScanlines;
     }
 
     /**
@@ -169,16 +169,16 @@ public class LineRasterizer {
         // More efficient ways to do some
         // Don't bother with fancy algorithms for vertical, horizontal, or diagonal lines
         if (x0 == x1) {
-            System.out.format("VERTICAL line: (%d, %d) to (%d, %d)\n", x0, y0, x1, y1);
+//            System.out.format("VERTICAL line: (%d, %d) to (%d, %d)\n", x0, y0, x1, y1);
             this.drawVertLine(x0, y0, y1, canvas);
         } else if (y0 == y1) {
-            System.out.format("HORIZONTAL line: (%d, %d) to (%d, %d)\n", x0, y0, x1, y1);
+//            System.out.format("HORIZONTAL line: (%d, %d) to (%d, %d)\n", x0, y0, x1, y1);
             this.drawHorizLine(x0, x1, y0, canvas);
         } else if (Math.abs(x1 - x0) == Math.abs(y1 - y0)) {
-            System.out.format("DIAGONAL line: (%d, %d) to (%d, %d)\n", x0, y0, x1, y1);
+//            System.out.format("DIAGONAL line: (%d, %d) to (%d, %d)\n", x0, y0, x1, y1);
             this.drawDiagLine(x0, y0, x1, y1, canvas);
         } else {
-            System.out.format("Drawing line: (%d, %d) to (%d, %d)\n", x0, y0, x1, y1);
+//            System.out.format("Drawing line: (%d, %d) to (%d, %d)\n", x0, y0, x1, y1);
             // Always draw from left to right
             if (x0 > x1) {
                 // swap xs
@@ -225,7 +225,7 @@ public class LineRasterizer {
                 }
 
                 for (int y = y0; y <= y1; y++) {
-                    System.out.format("Printed: (%d, %d)\n", x, y);
+//                    System.out.format("Printed: (%d, %d)\n", x, y);
                     canvas.setPixel(x, y);
                     if (decider <= 0) {
                         // Choose N

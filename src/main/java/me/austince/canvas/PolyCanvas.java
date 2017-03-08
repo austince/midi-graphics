@@ -19,19 +19,19 @@ import java.util.LinkedList;
  * This is a special subclass of simpleCanvas with functionality
  * for testing out the clipping assignment.
  */
-public class PolygonCanvas extends SimpleCanvas {
+public class PolyCanvas extends SimpleCanvas {
     private LinkedList<PolyShape> polyFillList;
     private final PolygonClipper polyClipper;
     private final PolyRasterizer polyRasterizer;
     private final LineRasterizer lineRasterizer;
     private Color clipWindowColor;
-    private boolean showClipWindow = true;
+    private boolean showClipWindow = false;
 
-    public PolygonCanvas() {
+    public PolyCanvas() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
-    public PolygonCanvas(int w, int h) {
+    public PolyCanvas(int w, int h) {
         super(w, h);
 
         this.clipWindowColor = Color.WHITE;
@@ -63,6 +63,7 @@ public class PolygonCanvas extends SimpleCanvas {
 
     @Override
     public void paint(Graphics g) {
+        // Pipeline: polygons -> clipper -> rasterizer
         // Update the image with the polygons and clip window
 
         // draw polys

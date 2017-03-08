@@ -1,25 +1,51 @@
-import me.austince.animation.AnimatedCanvas
+import gnu.getopt.Getopt
+import me.austince.animation.AnimatedPolyCanvas
 import me.austince.animation.AnimatedGui
-import me.austince.examples.SquareAnimationCanvas
+import me.austince.examples.SquareAnimationPolyCanvas
+import me.austince.midi.AkaiMpkKeyboardController
+import me.austince.midi.MidiController
+import org.jetbrains.annotations.Nullable
 import java.awt.Frame
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import javax.sound.midi.InvalidMidiDataException
+import javax.sound.midi.MidiUnavailableException
+import javax.sound.midi.MidiMessage
+import javax.sound.midi.Receiver
+import kotlin.system.exitProcess
 
 /**
  * Created by austin on 3/1/17.
  */
 
 class App : KeyListener {
-    val gui : AnimatedGui
+    val gui: AnimatedGui
+    val midiCtrl : MidiController?
 
-    constructor() {
-        val squareExample = SquareAnimationCanvas()
+    constructor(name: String, @Nullable midiController: MidiController?) {
+        val squareExample = SquareAnimationPolyCanvas()
         gui = AnimatedGui(squareExample)
-        gui.addKeyListener(this)
+        gui.title = name
         gui.canvas.addKeyListener(this)
         gui.setVisible(true)
+
+        midiCtrl = midiController
+        setupMidi()
+    }
+
+    fun setupMidi() {
+        val receiver = object : Receiver {
+            override fun send(midiMessage: MidiMessage, l: Long) {
+                println(midiMessage)
+            }
+
+            override fun close() {
+                println("close")
+            }
+        }
+        midiCtrl?.setReciever(receiver)
     }
 
     fun start() {
@@ -28,30 +54,59 @@ class App : KeyListener {
 
     fun stop() {
         println("Quitting!")
+        gui.stop()
         System.exit(0)
     }
 
-    override fun keyTyped(p0: KeyEvent?) {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun toggle() {
+        if (this.gui.isPaused) {
+            this.gui.resume()
+        } else {
+            this.gui.pause()
+        }
     }
 
     override fun keyPressed(event: KeyEvent?) {
-        val key : Char? = event?.getKeyChar()
+        val key: Char? = event?.getKeyChar()
 
-        when(key) {
+        when (key) {
             'Q', 'q' -> this.stop()
-            'P', 'p' -> gui.pause()
-            'R', 'r' -> gui.resume()
+            'P', 'p' -> this.toggle()
             else -> println(key)
         }
     }
 
-    override fun keyReleased(p0: KeyEvent?) {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun keyReleased(event: KeyEvent?) {}
+    override fun keyTyped(event: KeyEvent?) {}
 }
 
 fun main(args: Array<String>) {
-    val app = App()
+    val name: String = "CS 537 Midterm Project"
+    val opGetter = Getopt(name, args, "hlsd:n:D")
+    var c: Int
+
+    do {
+        c = opGetter.getopt()
+
+        when (c.toChar()) {
+            'l' -> {
+                MidiController.listDevices(false, false, true)
+                exitProcess(0)
+            }
+            'd' -> println("d")
+            (-1).toChar() -> { }
+            else -> println("else: $c")
+        }
+
+    } while (c != -1)
+
+    val ctrl: AkaiMpkKeyboardController? =
+            try {
+                AkaiMpkKeyboardController()
+            } catch (e: Exception) {
+                null
+            }
+
+    val app = App(name, ctrl)
     app.start()
 }

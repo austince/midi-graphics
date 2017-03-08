@@ -4,7 +4,7 @@
  * @contributor: Austin Cawley-Edwards <acawleye@stevens.edu>
  * @since Feb 17, 2017
  */
-package me.austince;
+package me.austince.clipper;
 
 import me.austince.polyshapes.PolyShape;
 
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Object to perform clipping
  */
-public class Clipper {
+public class PolygonClipper {
 
     /**
      * Stores the upper corner of the clip window
@@ -40,7 +40,7 @@ public class Clipper {
     /**
      * Empty constructor
      */
-    public Clipper() {
+    public PolygonClipper() {
         this(0, 0, 0, 0);
     }
 
@@ -51,7 +51,7 @@ public class Clipper {
      * @param urx upper right x
      * @param ury upper right y
      */
-    public Clipper(int llx, int lly, int urx, int ury) {
+    public PolygonClipper(int llx, int lly, int urx, int ury) {
         this.setBounds(llx, lly, urx, ury);
     }
 

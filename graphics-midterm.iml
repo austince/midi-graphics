@@ -25,7 +25,7 @@
             </option>
             <option name="k2jvmCompilerArguments">
               <K2JVMCompilerArguments>
-                <option name="jvmTarget" value="1.6" />
+                <option name="jvmTarget" value="1.8" />
               </K2JVMCompilerArguments>
             </option>
             <option name="_commonCompilerArguments">
@@ -48,7 +48,7 @@
           <KotlinVersionInfo>
             <option name="apiLevel" value="1.1" />
             <option name="languageLevel" value="1.1" />
-            <option name="targetPlatformName" value="JVM 1.6" />
+            <option name="targetPlatformName" value="JVM 1.8" />
           </KotlinVersionInfo>
         </option>
       </configuration>
@@ -66,6 +66,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="gnu.getopt:java-getopt:1.0.13" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:13.0" level="project" />
     <orderEntry type="library" name="Maven: net.java.timingframework:timingframework-swing:6.1.0" level="project" />

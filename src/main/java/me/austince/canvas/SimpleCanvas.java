@@ -21,18 +21,18 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class SimpleCanvas extends Canvas {
-    protected static int DEFAULT_WIDTH = 900;
-    protected static int DEFAULT_HEIGHT = 600;
+    protected static final int DEFAULT_WIDTH = 900;
+    protected static final int DEFAULT_HEIGHT = 600;
 
 
     private BufferedImage image;
     private int width;
     private int height;
-    private Color clearColor;
+    private Color bgColor;
     private Color curColor;
 
     public SimpleCanvas() {
-        this(SimpleCanvas.DEFAULT_WIDTH, SimpleCanvas.DEFAULT_HEIGHT);
+        this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
 
@@ -41,36 +41,35 @@ public class SimpleCanvas extends Canvas {
         this.height = h;
         this.image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
         this.curColor = new Color(0.0f, 0.0f, 0.0f);
-        this.clearColor = new Color(0);
+        this.bgColor = new Color(0);
         this.setSize(w, h);
     }
 
     public void clear() {
-        for (int i=0; i < this.getWidth(); i++)
-            for (int j=0; j < this.getHeight(); j++)
-                this.image.setRGB(i, j, this.clearColor.getRGB());
-    }
+        for (int i = 0; i < this.width; i++)
+            for (int j = 0; j < this.height; j++)
+                this.image.setRGB(i, j, this.bgColor.getRGB());
 
-    @Override
-    public int getHeight() {
-        return height;
     }
 
     public Color getCurColor() {
-        return curColor;
+        return this.curColor;
     }
 
-    public void setColor (float r, float g, float b) {
-        this.curColor = new Color(r,g, b);
+    public void setCurColor(Color color) {
+        this.curColor = color;
     }
 
-    public void setPixel (int x, int y) {
-        this.image.setRGB(x, (height - y - 1), this.curColor.getRGB());
+    public void setCurColor(float r, float g, float b) {
+        this.curColor = new Color(r, g, b);
+    }
+
+    public void setPixel(int x, int y) {
+        this.image.setRGB(x, (this.getHeight() - y - 1), this.getCurColor().getRGB());
     }
 
     public void paint(Graphics g) {
         // draw pixels
-        g.drawImage(this.image, 0, 0, Color.red, null);
+        g.drawImage(this.image, 0, 0, this.bgColor, null);
     }
-
 }
