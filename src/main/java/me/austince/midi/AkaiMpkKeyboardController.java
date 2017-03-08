@@ -1,3 +1,5 @@
+package me.austince.midi;
+
 import gnu.getopt.Getopt;
 
 import javax.sound.midi.*;
