@@ -61,10 +61,10 @@ public class PolygonClipper {
      * @param ury upper right y
      */
     public void setBounds(int llx, int lly, int urx, int ury) {
-        this.urx = urx;
-        this.ury = ury;
         this.llx = llx;
         this.lly = lly;
+        this.ury = ury;
+        this.urx = urx;
     }
 
     public Rectangle getBounds() {

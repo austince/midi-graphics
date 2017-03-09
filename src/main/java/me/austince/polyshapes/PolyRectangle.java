@@ -7,6 +7,10 @@ import java.awt.*;
  */
 public class PolyRectangle extends PolyShape {
 
+    public PolyRectangle(int width) {
+        this(width, width);
+    }
+
     public PolyRectangle(int width, int height) {
         super(new Point[] {
                 new Point(0, 0),
@@ -14,6 +18,15 @@ public class PolyRectangle extends PolyShape {
                 new Point(width, height),
                 new Point(0, height)
         });
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle(
+                getMinX(),
+                getMinY(),
+                getMaxX(),
+                getMaxY()
+        );
     }
 
     public int getMaxX() {

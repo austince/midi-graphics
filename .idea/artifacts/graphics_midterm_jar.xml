@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact name="graphics-midterm:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/graphics_midterm_jar</output-path>
+    <root id="root">
+      <element id="archive" name="graphics-midterm.jar">
+        <element id="module-output" name="graphics-midterm" />
+      </element>
+      <element id="library" level="project" name="Maven: com.surelogic:promises:4.4.0" />
+      <element id="library" level="project" name="Maven: net.java.timingframework:timingframework-core:6.1.0" />
+      <element id="library" level="project" name="Maven: net.java.timingframework:timingframework-swing:6.1.0" />
+      <element id="library" level="project" name="gnu.getopt:java-getopt:1.0.13" />
+      <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.1.0" />
+      <element id="library" level="project" name="Maven: org.jetbrains:annotations:13.0" />
+    </root>
+  </artifact>
+</component>

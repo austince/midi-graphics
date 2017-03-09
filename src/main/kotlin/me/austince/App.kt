@@ -3,6 +3,7 @@ package me.austince
 import gnu.getopt.Getopt
 import me.austince.animation.AnimatedMidiGui
 import me.austince.examples.midi.SquareAnimationAkaiPolyCanvas
+import me.austince.examples.midi.RectAnimationAkaiPolyCanvas
 import me.austince.midi.AkaiMpkMiniController
 import me.austince.midi.MidiController
 import org.jetbrains.annotations.Nullable
@@ -25,8 +26,9 @@ class App : KeyListener {
     val midiCtrl : MidiController?
 
     constructor(name: String, @Nullable midiController: MidiController?) {
-        val squareExample = SquareAnimationAkaiPolyCanvas()
-        gui = AnimatedMidiGui(squareExample)
+//        val example = RectAnimationAkaiPolyCanvas()
+        val example = SquareAnimationAkaiPolyCanvas()
+        gui = AnimatedMidiGui(example)
         gui.title = name
         gui.canvas.addKeyListener(this)
         gui.setVisible(true)
@@ -53,6 +55,7 @@ class App : KeyListener {
     fun stop() {
         println("Quitting!")
         gui.stop()
+        gui.close()
         midiCtrl?.close()
         System.exit(0)
     }

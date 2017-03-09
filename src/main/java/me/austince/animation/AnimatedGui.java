@@ -70,6 +70,10 @@ public class AnimatedGui extends JFrame implements ActionListener {
         this.animator.stop();
     }
 
+    public void close() {
+        this.dispose();
+    }
+
     public void pause() {
         this.animator.pause();
     }

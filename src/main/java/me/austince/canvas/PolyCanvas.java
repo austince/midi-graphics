@@ -69,6 +69,10 @@ public class PolyCanvas extends SimpleCanvas {
         return this.polyFillList.remove(poly);
     }
 
+    public LinkedList<PolyShape> getPolyShapes() {
+        return polyFillList;
+    }
+
     @Override
     public void paint(Graphics g) {
         // Pipeline: polygons -> clipper -> rasterizer

@@ -44,6 +44,24 @@ public class PolyShape {
         }
     }
 
+    public void scale(Point pScale) {
+        for (Point point : this.verticies) {
+            point.x *= pScale.x;
+            point.y *= pScale.y;
+        }
+    }
+
+    public void scale(int scalar) {
+        scale((double) scalar);
+    }
+
+    public void scale(double scalar) {
+        for (Point point : this.verticies) {
+            point.x *= scalar;
+            point.y *= scalar;
+        }
+    }
+
     public int[] getXs() {
         int[] xPoints = new int[this.verticies.length];
         for (int i = 0; i < xPoints.length; i++) {
