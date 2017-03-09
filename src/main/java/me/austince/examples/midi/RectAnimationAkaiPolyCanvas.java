@@ -19,6 +19,11 @@ public class RectAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
     private Point direction;
 
     public RectAnimationAkaiPolyCanvas() {
+        this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+
+    public RectAnimationAkaiPolyCanvas(int width, int height) {
+        super(width, height);
         this.rect = new PolyRectangle(
                 this.getWidth() / 2,
                 this.getHeight() / 2
@@ -107,6 +112,9 @@ public class RectAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
                                 clipper.urx,
                                 Math.min((int) clipBounds.getMaxY() + yDif, maxHeight)
                                 );
+                        break;
+                    case PAD_1_8:
+                        close();
                         break;
                     default:
                         System.out.println("Key has no effect!");

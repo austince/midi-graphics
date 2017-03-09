@@ -20,6 +20,12 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
     private Point direction;
 
     public SquareAnimationAkaiPolyCanvas() {
+        this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+
+    public SquareAnimationAkaiPolyCanvas(int width, int height) {
+        super(width, height);
+
         this.setBackground(Color.BLACK);
 
         this.setClipWindowShowing(true);

@@ -2,9 +2,11 @@ package me.austince
 
 import gnu.getopt.Getopt
 import me.austince.animation.AnimatedMidiGui
+import me.austince.animation.AnimatedPolyMidiCanvas
 import me.austince.examples.midi.SquareAnimationAkaiPolyCanvas
 import me.austince.examples.midi.RectAnimationAkaiPolyCanvas
 import me.austince.midi.AkaiMpkMiniController
+import me.austince.midi.AkaiMpkMiniReceiver
 import me.austince.midi.MidiController
 import org.jetbrains.annotations.Nullable
 import java.awt.event.KeyEvent
@@ -18,22 +20,25 @@ import kotlin.system.exitProcess
  */
 
 class App : KeyListener {
-    companion object {
-        val NAME = "Hey"
-    }
-
     val gui: AnimatedMidiGui
-    val midiCtrl : MidiController?
+    val midiCtrl: MidiController?
 
-    constructor(name: String, @Nullable midiController: MidiController?) {
-//        val example = RectAnimationAkaiPolyCanvas()
-        val example = SquareAnimationAkaiPolyCanvas()
+    constructor(name: String, midiController: MidiController?, width: Int?, height: Int?) {
+        var example: AnimatedPolyMidiCanvas
+        if (width != null && height != null) {
+            example = RectAnimationAkaiPolyCanvas(width, height)
+//            example = SquareAnimationAkaiPolyCanvas(width, height)
+        } else {
+            example = RectAnimationAkaiPolyCanvas()
+//            example = SquareAnimationAkaiPolyCanvas()
+        }
+
         gui = AnimatedMidiGui(example)
         gui.title = name
         gui.canvas.addKeyListener(this)
         gui.setVisible(true)
 
-        gui.addWindowListener(object: WindowAdapter() {
+        gui.addWindowListener(object : WindowAdapter() {
             override fun windowClosing(e: WindowEvent?) {
                 stop()
             }
@@ -46,6 +51,15 @@ class App : KeyListener {
     fun setupMidi() {
         midiCtrl?.open()
         midiCtrl?.setReciever(gui.canvas.receiver)
+        midiCtrl?.setReciever(object : AkaiMpkMiniReceiver() {
+            override fun sendKey(key: AkaiMpkMiniController.AkaiKey?, value: Byte, l: Long) {
+                when (key) {
+                    AkaiMpkMiniController.AkaiKey.PAD_1_4 -> stop()
+                    else -> {
+                    }
+                }
+            }
+        })
     }
 
     fun start() {
@@ -87,11 +101,15 @@ class App : KeyListener {
     override fun keyTyped(event: KeyEvent?) {}
 }
 
+
+val USAGE = "Usage: [-u] [-l] [-w width] [-h height]"
+
 fun main(args: Array<String>) {
     val name: String = "CS 537 Midterm Project"
-    val opGetter = Getopt(name, args, "hld:n:D")
+    val opGetter = Getopt(name, args, "ul:w:h:")
     var c: Int
-
+    var width: Int? = null
+    var height: Int? = null
     do {
         c = opGetter.getopt()
 
@@ -100,7 +118,9 @@ fun main(args: Array<String>) {
                 MidiController.listDevices(true)
                 exitProcess(0)
             }
-            'h' -> println("d")
+            'w' -> width = Integer.parseInt(opGetter.optarg)
+            'h' -> height = Integer.parseInt(opGetter.optarg)
+            'u' -> println(USAGE)
         }
 
     } while (c != -1)
@@ -112,6 +132,6 @@ fun main(args: Array<String>) {
                 null
             }
 
-    val app = App(name, ctrl)
+    val app = App(name, ctrl, width, height)
     app.start()
 }
