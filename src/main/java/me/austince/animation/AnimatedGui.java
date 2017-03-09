@@ -48,7 +48,7 @@ public class AnimatedGui extends JFrame implements ActionListener {
 
         setLayout(new BorderLayout());
         setTitle(DEFAULT_NAME);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
         add(this.canvas);
         pack();

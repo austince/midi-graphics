@@ -20,6 +20,8 @@ public class AnimatedPolyCanvas extends PolyCanvas implements TimingTarget {
         super(width, height);
     }
 
+    public void update(double v) {}
+
     @Override
     public void begin(Animator animator) {
         System.out.println("AnimatedPolyCanvas.begin");
@@ -43,8 +45,7 @@ public class AnimatedPolyCanvas extends PolyCanvas implements TimingTarget {
 
     @Override
     public void timingEvent(Animator animator, double v) {
-//        System.out.println("AnimatedPolyCanvas.timingEvent");
-//        System.out.println("animator = [" + animator + "], v = [" + v + "]");
+        this.update(v);
         // Reset the background
         this.clear();
         // Repaint the changes

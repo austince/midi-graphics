@@ -46,9 +46,9 @@ public class SimpleCanvas extends Canvas {
     }
 
     public void clear() {
-        for (int i = 0; i < this.width; i++)
-            for (int j = 0; j < this.height; j++)
-                this.image.setRGB(i, j, this.bgColor.getRGB());
+        for (int x = 0; x < this.width; x++)
+            for (int y = 0; y < this.height; y++)
+                this.image.setRGB(x, y, this.bgColor.getRGB());
 
     }
 
@@ -68,8 +68,13 @@ public class SimpleCanvas extends Canvas {
         this.image.setRGB(x, (this.getHeight() - y - 1), this.getCurColor().getRGB());
     }
 
+    @Override
     public void paint(Graphics g) {
         // draw pixels
-        g.drawImage(this.image, 0, 0, this.bgColor, null);
+//        g.drawImage(this.image, 0, 0, null);
+//        g.drawImage(this.image, 0, 0, this.bgColor, null);
+
+        Graphics2D g2 = (Graphics2D) g;
+        g2.drawImage(this.image, 0, 0, null);
     }
 }

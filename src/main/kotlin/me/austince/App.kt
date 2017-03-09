@@ -1,23 +1,15 @@
 package me.austince
 
 import gnu.getopt.Getopt
-import me.austince.animation.AnimatedPolyCanvas
-import me.austince.animation.AnimatedGui
 import me.austince.animation.AnimatedMidiGui
 import me.austince.examples.midi.SquareAnimationAkaiPolyCanvas
 import me.austince.midi.AkaiMpkMiniController
-import me.austince.midi.AkaiMpkMiniReceiver
 import me.austince.midi.MidiController
 import org.jetbrains.annotations.Nullable
-import java.awt.Frame
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.sound.midi.InvalidMidiDataException
-import javax.sound.midi.MidiUnavailableException
-import javax.sound.midi.MidiMessage
-import javax.sound.midi.Receiver
 import kotlin.system.exitProcess
 
 /**
@@ -38,6 +30,12 @@ class App : KeyListener {
         gui.title = name
         gui.canvas.addKeyListener(this)
         gui.setVisible(true)
+
+        gui.addWindowListener(object: WindowAdapter() {
+            override fun windowClosing(e: WindowEvent?) {
+                stop()
+            }
+        })
 
         midiCtrl = midiController
         setupMidi()

@@ -8,6 +8,7 @@ import me.austince.midi.AkaiMpkMiniReceiver;
 import me.austince.polyshapes.PolyRectangle;
 import org.jdesktop.core.animation.timing.Animator;
 
+import javax.sound.midi.Receiver;
 import java.awt.*;
 
 /**
@@ -36,7 +37,11 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
 
         this.setClipperBounds(0, 0, this.getWidth() - 1, this.getHeight() - 1);
 
-        this.setReceiver(new AkaiMpkMiniReceiver() {
+        this.setReceiver(buildReceiver());
+    }
+
+    private Receiver buildReceiver() {
+        return new AkaiMpkMiniReceiver() {
             @Override
             public void sendKey(AkaiKey key, byte value, long l) {
                 double percentage = AkaiMpkMiniController.getValuePercentage(value);
@@ -79,24 +84,37 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
                                 maxHeight - (height / 2)
                         );
                         break;
-                    case DIAL_4:
-                        int adjX = (int) (percentage * getWidth()) / 2;
-                        int adjY = (int) (percentage * getHeight()) / 2;
+                    case DIAL_5:
+//                        int maxMoveRight = (int) (maxWidth - clipBounds.getMaxX());
+//                        int maxMoveLeft = - (int) (clipBounds.getX());
+
+                        // desired horizontal center is 'width'
+                        int clipCenter = (int) (clipBounds.getX() + (clipBounds.getWidth() / 2));
+                        int dif =  width - clipCenter;
+
+                        // Moving left
+//                        if (dif < 0 && dif < maxMoveLeft) {
+//                            dif = maxMoveLeft;
+//                        } else if (dif > 0 && dif > maxMoveRight) {
+//                            dif = maxMoveRight;
+//                        }
+
                         setClipperBounds(
-                                (int) clipBounds.getX() + adjX,
-                                (int) clipBounds.getY() + adjY,
-                                (int) clipBounds.getMaxX() - adjX,
-                                (int) clipBounds.getMaxY() - adjY
+                                Math.max((int) clipBounds.getX() + dif, 0),
+                                Math.max((int) clipBounds.getY(), 0),
+                                Math.min((int) clipBounds.getMaxX() + dif, maxWidth),
+                                Math.min((int) clipBounds.getMaxY(), maxHeight)
                         );
                         break;
                     default:
                         System.out.println("Key has no effect!");
                 }
             }
-        });
+        };
     }
 
-    private void update(double v) {
+    @Override
+    public void update(double v) {
         if (direction.x > 0
                 && this.rect.getMaxX() + direction.x >= this.getWidth()) {
             direction.x *= -1;
@@ -120,12 +138,5 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
     @Override
     public void end(Animator animator) {
         super.end(animator);
-    }
-
-    @Override
-    public void timingEvent(Animator animator, double v) {
-        // Update first, then call the super method
-        update(v);
-        super.timingEvent(animator, v);
     }
 }
