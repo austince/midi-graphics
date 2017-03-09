@@ -32,6 +32,9 @@
 # IntelliJ
 /out/
 
+# scheme plugin
+.idea/scheme_project.xml
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
