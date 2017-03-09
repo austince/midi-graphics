@@ -1,10 +1,6 @@
 package me.austince.midi;
 
-import javax.sound.midi.MidiDevice;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.Receiver;
+import javax.sound.midi.*;
 
 /**
  * Created by austin on 3/8/17.
@@ -12,14 +8,14 @@ import javax.sound.midi.Receiver;
 public class MidiController {
     private MidiDevice.Info info;
     private MidiDevice device;
-    private boolean allowsInput, allowsOutput;
+    private boolean allowsGetInput, allowsGetOutput;
 
     public MidiController(int deviceIndex) throws InvalidMidiDataException, MidiUnavailableException {
         this(getMidiDeviceInfo(deviceIndex));
     }
 
-    public MidiController(String deviceName) throws InvalidMidiDataException, MidiUnavailableException {
-        this(getMidiDeviceInfo(deviceName));
+    public MidiController(String deviceName, boolean allowsGetOutput, boolean allowsGetInput) throws InvalidMidiDataException, MidiUnavailableException {
+        this(getMidiDeviceInfo(deviceName, allowsGetOutput, allowsGetInput));
     }
 
     public MidiController(MidiDevice.Info info) throws InvalidMidiDataException, MidiUnavailableException {
@@ -28,14 +24,14 @@ public class MidiController {
         }
         this.info = info;
         this.device = MidiSystem.getMidiDevice(this.info);
-        this.allowsInput = (this.device.getMaxTransmitters() != 0);
-        this.allowsOutput = (this.device.getMaxReceivers() != 0);
+        this.allowsGetInput = (this.device.getMaxTransmitters() != 0);
+        this.allowsGetOutput = (this.device.getMaxReceivers() != 0);
 
         this.open();
     }
 
     public void setReciever(Receiver receiver) throws InvalidMidiDataException, MidiUnavailableException {
-        if (!this.allowsOutput) {
+        if (!this.allowsGetInput) {
             throw new InvalidMidiDataException("Midi device " + this.info.getName() + " does not support output.");
         }
 
@@ -43,11 +39,19 @@ public class MidiController {
     }
 
     public void open() throws MidiUnavailableException {
-        this.device.open();
+        if (!this.device.isOpen())
+            this.device.open();
     }
 
     public void close() {
-        this.device.close();
+        for (Transmitter trans : this.device.getTransmitters()) {
+            Receiver receiver = trans.getReceiver();
+            if (receiver != null)
+                receiver.close();
+        }
+
+        if (this.device.isOpen())
+            this.device.close();
     }
 
     /**
@@ -63,12 +67,26 @@ public class MidiController {
      * @return A MidiDevice.Info object matching the passed device
      * name or null if none could be found.
      */
-    public static MidiDevice.Info getMidiDeviceInfo(String strDeviceName) {
+    public static MidiDevice.Info getMidiDeviceInfo(String strDeviceName, boolean allowsOutput, boolean allowsInput) {
         MidiDevice.Info[] aInfos = MidiSystem.getMidiDeviceInfo();
-        for (int i = 0; i < aInfos.length; i++) {
-            if (aInfos[i].getName().equals(strDeviceName)) {
-                return aInfos[i];
+
+        for (MidiDevice.Info info : aInfos) {
+            MidiDevice device;
+            try {
+                device = MidiSystem.getMidiDevice(info);
+            } catch (MidiUnavailableException e) {
+                continue;
             }
+
+            boolean dAllowsInput = (device.getMaxTransmitters() != 0);
+            boolean dAllowsOutput = (device.getMaxReceivers() != 0);
+
+            if (info.getName().contains(strDeviceName)
+                    && (dAllowsInput == allowsInput)
+                    && (dAllowsOutput == allowsOutput)) {
+                return info;
+            }
+
         }
         return null;
     }
@@ -92,44 +110,35 @@ public class MidiController {
         return aInfos[index];
     }
 
-    public static void listDevices(boolean bOnlyInput,
-                                   boolean bOnlyOutput,
-                                   boolean bVerbose) {
-        if (bOnlyInput && !bOnlyOutput) {
-            System.out.println("Available MIDI IN Devices:");
-        } else if (!bOnlyInput && bOnlyOutput) {
-            System.out.println("Available MIDI Out Devices:");
-        } else {
-            System.out.println("Available MIDI Devices:");
+    public static void listDevices(boolean bVerbose) {
+        MidiDevice.Info[] aInfos = MidiSystem.getMidiDeviceInfo();
+        if (aInfos.length == 0) {
+            System.out.println("[No devices available]");
+            return;
         }
 
-        MidiDevice.Info[] aInfos = MidiSystem.getMidiDeviceInfo();
         for (int i = 0; i < aInfos.length; i++) {
             try {
                 MidiDevice device = MidiSystem.getMidiDevice(aInfos[i]);
                 boolean bAllowsInput = (device.getMaxTransmitters() != 0);
                 boolean bAllowsOutput = (device.getMaxReceivers() != 0);
-                if ((bAllowsInput && bOnlyInput) ||
-                        (bAllowsOutput && bOnlyOutput)) {
-                    if (bVerbose) {
-                        System.out.println("" + i + "  "
-                                + (bAllowsInput ? "IN " : "   ")
-                                + (bAllowsOutput ? "Out " : "    ")
-                                + aInfos[i].getName() + ", "
-                                + aInfos[i].getVendor() + ", "
-                                + aInfos[i].getVersion() + ", "
-                                + aInfos[i].getDescription());
-                    } else {
-                        System.out.println("" + i + "  " + aInfos[i].getName());
-                    }
+
+                if (bVerbose) {
+                    System.out.println("" + i + "  "
+                            + (bAllowsInput ? "IN " : "   ")
+                            + (bAllowsOutput ? "Out " : "    ")
+                            + aInfos[i].getName() + ", "
+                            + aInfos[i].getVendor() + ", "
+                            + aInfos[i].getVersion() + ", "
+                            + aInfos[i].getDescription());
+                } else {
+                    System.out.println("" + i + "  " + aInfos[i].getName());
                 }
             } catch (MidiUnavailableException e) {
                 // device is obviously not available...
                 // System.out.println(e);
             }
         }
-        if (aInfos.length == 0) {
-            System.out.println("[No devices available]");
-        }
+
     }
 }

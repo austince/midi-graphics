@@ -1,8 +1,12 @@
+package me.austince
+
 import gnu.getopt.Getopt
 import me.austince.animation.AnimatedPolyCanvas
 import me.austince.animation.AnimatedGui
-import me.austince.examples.SquareAnimationPolyCanvas
-import me.austince.midi.AkaiMpkKeyboardController
+import me.austince.animation.AnimatedMidiGui
+import me.austince.examples.midi.SquareAnimationAkaiPolyCanvas
+import me.austince.midi.AkaiMpkMiniController
+import me.austince.midi.AkaiMpkMiniReceiver
 import me.austince.midi.MidiController
 import org.jetbrains.annotations.Nullable
 import java.awt.Frame
@@ -21,12 +25,16 @@ import kotlin.system.exitProcess
  */
 
 class App : KeyListener {
-    val gui: AnimatedGui
+    companion object {
+        val NAME = "Hey"
+    }
+
+    val gui: AnimatedMidiGui
     val midiCtrl : MidiController?
 
     constructor(name: String, @Nullable midiController: MidiController?) {
-        val squareExample = SquareAnimationPolyCanvas()
-        gui = AnimatedGui(squareExample)
+        val squareExample = SquareAnimationAkaiPolyCanvas()
+        gui = AnimatedMidiGui(squareExample)
         gui.title = name
         gui.canvas.addKeyListener(this)
         gui.setVisible(true)
@@ -36,16 +44,8 @@ class App : KeyListener {
     }
 
     fun setupMidi() {
-        val receiver = object : Receiver {
-            override fun send(midiMessage: MidiMessage, l: Long) {
-                println(midiMessage)
-            }
-
-            override fun close() {
-                println("close")
-            }
-        }
-        midiCtrl?.setReciever(receiver)
+        midiCtrl?.open()
+        midiCtrl?.setReciever(gui.canvas.receiver)
     }
 
     fun start() {
@@ -55,6 +55,7 @@ class App : KeyListener {
     fun stop() {
         println("Quitting!")
         gui.stop()
+        midiCtrl?.close()
         System.exit(0)
     }
 
@@ -66,12 +67,17 @@ class App : KeyListener {
         }
     }
 
+    fun toggleClipWindow() {
+        this.gui.canvas.isClipWindowShowing = !this.gui.canvas.isClipWindowShowing
+    }
+
     override fun keyPressed(event: KeyEvent?) {
         val key: Char? = event?.getKeyChar()
 
         when (key) {
             'Q', 'q' -> this.stop()
             'P', 'p' -> this.toggle()
+            'C', 'c' -> this.toggleClipWindow()
             else -> println(key)
         }
     }
@@ -82,7 +88,7 @@ class App : KeyListener {
 
 fun main(args: Array<String>) {
     val name: String = "CS 537 Midterm Project"
-    val opGetter = Getopt(name, args, "hlsd:n:D")
+    val opGetter = Getopt(name, args, "hld:n:D")
     var c: Int
 
     do {
@@ -90,19 +96,17 @@ fun main(args: Array<String>) {
 
         when (c.toChar()) {
             'l' -> {
-                MidiController.listDevices(false, false, true)
+                MidiController.listDevices(true)
                 exitProcess(0)
             }
-            'd' -> println("d")
-            (-1).toChar() -> { }
-            else -> println("else: $c")
+            'h' -> println("d")
         }
 
     } while (c != -1)
 
-    val ctrl: AkaiMpkKeyboardController? =
+    val ctrl: AkaiMpkMiniController? =
             try {
-                AkaiMpkKeyboardController()
+                AkaiMpkMiniController()
             } catch (e: Exception) {
                 null
             }

@@ -1,6 +1,9 @@
-package me.austince.examples;
+package me.austince.examples.midi;
 
-import me.austince.animation.AnimatedPolyCanvas;
+import me.austince.animation.AnimatedPolyMidiCanvas;
+import me.austince.midi.AkaiMpkMiniController;
+import me.austince.midi.AkaiMpkMiniController.AkaiKey;
+import me.austince.midi.AkaiMpkMiniReceiver;
 import me.austince.polyshapes.PolyRectangle;
 import org.jdesktop.core.animation.timing.Animator;
 
@@ -9,11 +12,11 @@ import java.awt.*;
 /**
  * Created by austin on 3/7/17.
  */
-public class SquareAnimationPolyCanvas extends AnimatedPolyCanvas {
+public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
     private PolyRectangle rect;
     private Point direction;
 
-    public SquareAnimationPolyCanvas() {
+    public SquareAnimationAkaiPolyCanvas() {
         this.rect = new PolyRectangle(
                 this.getWidth() / 2,
                 this.getHeight() / 2
@@ -23,12 +26,26 @@ public class SquareAnimationPolyCanvas extends AnimatedPolyCanvas {
         this.rect.setColor(new Color(1.0f, 0.0f, 0.0f));
 
         this.addPolyShape(this.rect);
-        this.setShowClipWindow(true);
+        this.setClipWindowShowing(true);
 
         this.direction = new Point(50, 0);
 
-        this.setClipperBounds(200, 50, this.getWidth() - 1, this.getHeight() - 1);
+        this.setClipperBounds(0, 0, this.getWidth() - 1, this.getHeight() - 1);
 
+        this.setReceiver(new AkaiMpkMiniReceiver() {
+            @Override
+            public void sendKey(AkaiKey key, byte value, long l) {
+                double percentage = AkaiMpkMiniController.getValuePercentage(value);
+                System.out.printf("key pressed: %s with value %d of %f\n", key.name(), value, percentage);
+                switch (key) {
+                    case DIAL_1:
+                        // Change the clip bounds based on percentage
+                        break;
+                    default:
+                        System.out.println("Key has no effect!");
+                }
+            }
+        });
     }
 
     private void update(double v) {

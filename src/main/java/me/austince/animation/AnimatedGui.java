@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
 public class AnimatedGui extends JFrame implements ActionListener {
     public AnimatedPolyCanvas canvas;
     private final Animator animator;
-    private static final int DEFAULT_HEIGHT = 600;
-    private static final int DEFAULT_WIDTH = 900;
+    protected static final int DEFAULT_HEIGHT = 600;
+    protected static final int DEFAULT_WIDTH = 900;
     private static final String DEFAULT_NAME = "Austin's Animated GUI!";
 
     public AnimatedGui() {

@@ -25,7 +25,7 @@ public class PolyCanvas extends SimpleCanvas {
     private final PolyRasterizer polyRasterizer;
     private final LineRasterizer lineRasterizer;
     private Color clipWindowColor;
-    private boolean showClipWindow = false;
+    private boolean clipWindowShowing = false;
 
     public PolyCanvas() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -49,8 +49,12 @@ public class PolyCanvas extends SimpleCanvas {
         this.setClipperBounds(rect.x, rect.y, rect.width, rect.height);
     }
 
-    public void setShowClipWindow(boolean show) {
-        this.showClipWindow = show;
+    public boolean isClipWindowShowing() {
+        return this.clipWindowShowing;
+    }
+
+    public void setClipWindowShowing(boolean show) {
+        this.clipWindowShowing = show;
     }
 
     public void addPolyShape(PolyShape poly) {
@@ -73,7 +77,7 @@ public class PolyCanvas extends SimpleCanvas {
             this.polyRasterizer.drawPolygon(clippedPoints, this);
         }
 
-        if (this.showClipWindow) {
+        if (this.clipWindowShowing) {
             this.setCurColor(this.clipWindowColor);
             // Top
             this.lineRasterizer.drawLine(
