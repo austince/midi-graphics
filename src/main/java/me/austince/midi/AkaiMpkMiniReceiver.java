@@ -13,7 +13,14 @@ public abstract class AkaiMpkMiniReceiver implements Receiver {
 
     @Override
     public void send(MidiMessage midiMessage, long l) {
-        this.sendKey(AkaiMpkMiniController.getKey(midiMessage), AkaiMpkMiniController.getValue(midiMessage), l);
+        AkaiKey key = AkaiMpkMiniController.getKey(midiMessage);
+
+        if (key == null) {
+            System.err.printf("Key %d is not supported.\n", midiMessage.getMessage()[1]);
+            return;
+        }
+
+        this.sendKey(key, AkaiMpkMiniController.getValue(midiMessage), l);
     }
 
     @Override

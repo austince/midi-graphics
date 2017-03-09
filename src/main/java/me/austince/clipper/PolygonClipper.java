@@ -45,7 +45,6 @@ public class PolygonClipper {
     }
 
     /**
-     *
      * @param llx lower left x
      * @param lly lower left y
      * @param urx upper right x
@@ -56,7 +55,6 @@ public class PolygonClipper {
     }
 
     /**
-     *
      * @param llx lower left x
      * @param lly lower left y
      * @param urx upper right x
@@ -67,6 +65,17 @@ public class PolygonClipper {
         this.ury = ury;
         this.llx = llx;
         this.lly = lly;
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle(llx, lly, urx, ury);
+    }
+
+    public Point[] getPointBounds() {
+        return new Point[]{
+                new Point(llx, lly),
+                new Point(urx, ury)
+        };
     }
 
     /**
@@ -183,8 +192,8 @@ public class PolygonClipper {
      * The routine should return the the vertex count of the polygon
      * resulting from the clipping.
      *
-     * @param inxs  - x coords of vertices of polygon to be clipped.
-     * @param inys  - y coords of vertices of polygon to be clipped.
+     * @param inxs - x coords of vertices of polygon to be clipped.
+     * @param inys - y coords of vertices of polygon to be clipped.
      * @return number of vertices in the polygon resulting after clipping
      */
     public Point[] clipPolygon(int inxs[], int inys[]) {

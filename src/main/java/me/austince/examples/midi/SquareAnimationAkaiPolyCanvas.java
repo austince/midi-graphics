@@ -1,6 +1,7 @@
 package me.austince.examples.midi;
 
 import me.austince.animation.AnimatedPolyMidiCanvas;
+import me.austince.clipper.PolygonClipper;
 import me.austince.midi.AkaiMpkMiniController;
 import me.austince.midi.AkaiMpkMiniController.AkaiKey;
 import me.austince.midi.AkaiMpkMiniReceiver;
@@ -24,7 +25,10 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
         this.setBackground(Color.BLACK);
 
         this.rect.setColor(new Color(1.0f, 0.0f, 0.0f));
-
+        this.rect.setCenter(new Point(
+                (getWidth() - 1) / 2,
+                (getHeight() - 1) / 4
+        ));
         this.addPolyShape(this.rect);
         this.setClipWindowShowing(true);
 
@@ -37,9 +41,53 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
             public void sendKey(AkaiKey key, byte value, long l) {
                 double percentage = AkaiMpkMiniController.getValuePercentage(value);
                 System.out.printf("key pressed: %s with value %d of %f\n", key.name(), value, percentage);
+
+                int maxWidth = getWidth() - 1;
+                int width = (int) (maxWidth * percentage);
+
+                int maxHeight = getHeight() - 1;
+                int height = (int) (maxHeight * percentage);
+
+                PolygonClipper clipper = getClipper();
+                Rectangle clipBounds = clipper.getBounds();
+
                 switch (key) {
                     case DIAL_1:
-                        // Change the clip bounds based on percentage
+                        // Just X
+                        setClipperBounds(
+                                width / 2,
+                                (int) clipBounds.getY(),
+                                maxWidth - (width / 2),
+                                (int) clipBounds.getHeight()
+                        );
+                        break;
+                    case DIAL_2:
+                        // Just Y
+                        setClipperBounds(
+                                (int) clipBounds.getX(),
+                                height / 2,
+                                (int) clipBounds.getWidth(),
+                                maxHeight - (height / 2)
+                        );
+                        break;
+                    case DIAL_3:
+                        // Both X and Y
+                        setClipperBounds(
+                                width / 2,
+                                height / 2,
+                                maxWidth - (width / 2),
+                                maxHeight - (height / 2)
+                        );
+                        break;
+                    case DIAL_4:
+                        int adjX = (int) (percentage * getWidth()) / 2;
+                        int adjY = (int) (percentage * getHeight()) / 2;
+                        setClipperBounds(
+                                (int) clipBounds.getX() + adjX,
+                                (int) clipBounds.getY() + adjY,
+                                (int) clipBounds.getMaxX() - adjX,
+                                (int) clipBounds.getMaxY() - adjY
+                        );
                         break;
                     default:
                         System.out.println("Key has no effect!");

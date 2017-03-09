@@ -45,6 +45,10 @@ public class PolyCanvas extends SimpleCanvas {
         this.polyClipper.setBounds(llx, lly, urx, ury);
     }
 
+    public PolygonClipper getClipper() {
+        return this.polyClipper;
+    }
+
     public void setClipperBounds(Rectangle rect) {
         this.setClipperBounds(rect.x, rect.y, rect.width, rect.height);
     }
