@@ -38,8 +38,11 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
 
     private Receiver buildReceiver() {
         return new AkaiMpkMiniReceiver() {
+            AkaiMpkMiniReceiver clipperReceiver = SquareAnimationAkaiPolyCanvas.super.buildClipperReceiver();
+
             @Override
             public void sendKey(AkaiMpkMiniController.AkaiKey key, byte value, long l) {
+                clipperReceiver.sendKey(key, value, l);
                 double percentage = AkaiMpkMiniController.getValuePercentage(value);
                 System.out.printf("key pressed: %s with value %d of %f\n", key.name(), value, percentage);
 
@@ -48,9 +51,6 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
 
                 int maxHeight = getHeight() - 1;
                 int height = (int) (maxHeight * percentage);
-
-                PolygonClipper clipper = getClipper();
-                Rectangle clipBounds = clipper.getBounds();
 
                 switch (key) {
                     case PAD_1_5:
@@ -63,57 +63,6 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
                         ));
                         square.setColor(Color.CYAN);
                         addPolyShape(square);
-                        break;
-                    case DIAL_1:
-                        // Just X
-                        setClipperBounds(
-                                width / 2,
-                                (int) clipBounds.getY(),
-                                maxWidth - (width / 2),
-                                (int) clipBounds.getHeight()
-                        );
-                        break;
-                    case DIAL_2:
-                        // Just Y
-                        setClipperBounds(
-                                (int) clipBounds.getX(),
-                                height / 2,
-                                (int) clipBounds.getWidth(),
-                                maxHeight - (height / 2)
-                        );
-                        break;
-                    case DIAL_3:
-                        // Both X and Y around center
-                        setClipperBounds(
-                                width / 2,
-                                height / 2,
-                                maxWidth - (width / 2),
-                                maxHeight - (height / 2)
-                        );
-                        break;
-                    case DIAL_5:
-                        // desired horizontal center is 'width'
-                        int clipHorizCenter = (int) (clipBounds.getX() + (clipBounds.getWidth() / 2));
-                        int xDif = width - clipHorizCenter;
-
-                        setClipperBounds(
-                                Math.max((int) clipBounds.getX() + xDif, 0),
-                                clipper.lly,
-                                Math.min((int) clipBounds.getMaxX() + xDif, maxWidth),
-                                clipper.ury
-                        );
-                        break;
-                    case DIAL_6:
-                        // desired vertical center is 'height'
-                        int clipVertCenter = (int) (clipBounds.getY() + (clipBounds.getHeight() / 2));
-                        int yDif = height - clipVertCenter;
-
-                        setClipperBounds(
-                                clipper.llx,
-                                Math.max((int) clipBounds.getY() + yDif, 0),
-                                clipper.urx,
-                                Math.min((int) clipBounds.getMaxY() + yDif, maxHeight)
-                        );
                         break;
                     default:
                         System.out.println("Key has no effect!");

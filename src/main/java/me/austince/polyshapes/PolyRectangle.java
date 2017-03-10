@@ -18,6 +18,7 @@ public class PolyRectangle extends PolyShape {
                 new Point(width, height),
                 new Point(0, height)
         });
+
     }
 
     public Rectangle getBounds() {
