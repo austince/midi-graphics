@@ -1,3 +1,4 @@
+@file:JvmName("AppKt")
 package me.austince
 
 import gnu.getopt.Getopt
