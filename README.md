@@ -6,12 +6,12 @@ Using a 2D pipeline to create something more.
 ## Building + Running
 This is a **maven** project, but some helpful commands are written in the `Makefile`.
 
-- `make` | `make compile` : default build
-- `make` clean : clean up
+- `make` : default build
+- `make clean` : clean up
 - `make run` : runs the application with default settings
 
-To run with the command line args:
-- `mvn exec:java -Dexec.args="[ARGUMENTS]"`
+After `make`:  
+- `java -jar target/midterm-1.0-jar-with-dependencies.jar [ARGUMENTS]`
 
 ## Application arguments
 

@@ -15,10 +15,11 @@ $(info Tested only on Maven version ${MVN_REQ_VERSION}. Please install that vers
 all:
 	mvn package
 
-compile: all
+compile:
+	mvn compile
 
 clean:
 	mvn clean
 
-run: all
+run:
 	mvn exec:java
