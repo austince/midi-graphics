@@ -18,16 +18,17 @@ public class PolyRectangle extends PolyShape {
                 new Point(width, height),
                 new Point(0, height)
         });
-
+        this.center = new Point(width / 2, height / 2);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(
+       /* return new Rectangle(
                 getMinX(),
                 getMinY(),
                 getMaxX(),
                 getMaxY()
-        );
+        );*/
+       return this.toPolygon().getBounds();
     }
 
     public int getMaxX() {

@@ -30,11 +30,11 @@ public class SimpleCanvas extends Canvas {
     private int height;
     private Color bgColor;
     private Color curColor;
+    private int curRGB;
 
     public SimpleCanvas() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
-
 
     public SimpleCanvas(int w, int h) {
         this.width = w;
@@ -58,6 +58,7 @@ public class SimpleCanvas extends Canvas {
 
     public void setCurColor(Color color) {
         this.curColor = color;
+        this.curRGB = color.getRGB();
     }
 
     public void setCurColor(float r, float g, float b) {
@@ -65,7 +66,9 @@ public class SimpleCanvas extends Canvas {
     }
 
     public void setPixel(int x, int y) {
-        this.image.setRGB(x, (this.getHeight() - y - 1), this.getCurColor().getRGB());
+        int curPixelRGB = this.image.getRGB(x, (this.getHeight() - y - 1));
+        if (this.curRGB != curPixelRGB)
+            this.image.setRGB(x, (this.getHeight() - y - 1), this.curRGB);
     }
 
     @Override

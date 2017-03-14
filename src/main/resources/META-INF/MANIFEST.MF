@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
-Class-Path: promises-4.4.0.jar timingframework-core-6.1.0.jar timingfr
- amework-swing-6.1.0.jar java-getopt-1.0.13.jar kotlin-stdlib-1.1.0.ja
- r annotations-13.0.jar
+Class-Path: kotlin-stdlib-1.1.0.jar timingframework-swing-6.1.0.jar ja
+ va-getopt-1.0.13.jar kotlin-reflect-1.1.0.jar kotlin-stdlib-1.1.0.jar
+  annotations-13.0.jar timingframework-core-6.1.0.jar annotations-13.0
+ .jar promises-4.4.0.jar kotlin-runtime-1.0.0.jar
 Main-Class: me.austince.AppKt
 

@@ -39,9 +39,10 @@ public class AnimatedGui extends JFrame implements ActionListener {
         this.animator = new Animator.Builder()
                 // Around 60 fps
                 .setDuration(17, TimeUnit.MILLISECONDS)
+//                .setDuration(600, TimeUnit.SECONDS)
                 // Repeat forever
                 .setRepeatCount(Animator.INFINITE)
-                .setDebugName(DEFAULT_NAME)
+                .setDebugName(DEFAULT_NAME + " Animator")
                 .setRepeatBehavior(Animator.RepeatBehavior.LOOP)
                 .addTarget(this.canvas)
                 .build();

@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public class PolyShape {
     private Point[] verticies;
-    private Point center;
+    protected Point center;
     public Color color;
 
     public PolyShape() {
@@ -44,10 +44,10 @@ public class PolyShape {
         }
     }
 
-    public void scale(Point pScale) {
+    public void scale(Point adjVec) {
         for (Point point : this.verticies) {
-            point.x *= pScale.x;
-            point.y *= pScale.y;
+            point.x *= adjVec.x;
+            point.y *= adjVec.y;
         }
     }
 

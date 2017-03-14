@@ -37,7 +37,7 @@ public class PolyRasterizer {
      // x and y arrays.  The ith vertex will have coordinate  (x[i], y[i])
      // You are to add the implementation here using only calls
      // to C.setPixel()
-     * @param vertices a list of verticies
+     * @param vertices a list of vertices
      * @param canvas canvas to draw on
      */
     public void drawPolygon(Point[] vertices, SimpleCanvas canvas) {

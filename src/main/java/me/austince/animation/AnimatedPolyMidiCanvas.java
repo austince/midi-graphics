@@ -26,7 +26,7 @@ public class AnimatedPolyMidiCanvas extends AnimatedPolyCanvas {
             @Override
             public void sendKey(AkaiMpkMiniController.AkaiKey key, byte value, long l) {
                 double percentage = AkaiMpkMiniController.getValuePercentage(value);
-                System.out.printf("key pressed: %s with value %d of %f\n", key.name(), value, percentage);
+//                System.out.printf("key pressed: %s with value %d of %f\n", key.name(), value, percentage);
 
                 int maxWidth = getWidth() - 1;
                 int width = (int) (maxWidth * percentage);

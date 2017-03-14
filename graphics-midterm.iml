@@ -30,8 +30,6 @@
             </option>
             <option name="_commonCompilerArguments">
               <DummyImpl>
-                <option name="languageVersion" value="1.1" />
-                <option name="apiVersion" value="1.1" />
                 <option name="pluginClasspaths">
                   <array />
                 </option>
@@ -46,7 +44,7 @@
         <option name="useProjectSettings" value="false" />
         <option name="versionInfo">
           <KotlinVersionInfo>
-            <option name="apiLevel" value="1.1" />
+            <option name="apiLevel" value="1.0" />
             <option name="languageLevel" value="1.1" />
             <option name="targetPlatformName" value="JVM 1.8" />
           </KotlinVersionInfo>
@@ -62,15 +60,21 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/kotlin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/kotlin" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="gnu.getopt:java-getopt:1.0.13" level="project" />
+    <orderEntry type="library" name="org.jetbrains.kotlin:kotlin-runtime:1.0.0" level="project" />
+    <orderEntry type="library" name="org.jetbrains.kotlin:kotlin-reflect:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-runtime:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-reflect:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: net.java.timingframework:timingframework-swing:6.1.0" level="project" />
     <orderEntry type="library" name="Maven: net.java.timingframework:timingframework-core:6.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.surelogic:promises:4.4.0" level="project" />
+    <orderEntry type="library" name="Maven: gnu.getopt:java-getopt:1.0.13" level="project" />
+    <orderEntry type="library" name="Maven: gov.nist.math:jama:1.0.3" level="project" />
   </component>
 </module>

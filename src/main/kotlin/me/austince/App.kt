@@ -4,11 +4,9 @@ import gnu.getopt.Getopt
 import me.austince.animation.AnimatedMidiGui
 import me.austince.animation.AnimatedPolyMidiCanvas
 import me.austince.examples.midi.SquareAnimationAkaiPolyCanvas
-import me.austince.examples.midi.RectAnimationAkaiPolyCanvas
 import me.austince.midi.AkaiMpkMiniController
 import me.austince.midi.AkaiMpkMiniReceiver
 import me.austince.midi.MidiController
-import org.jetbrains.annotations.Nullable
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowAdapter
@@ -22,15 +20,16 @@ import kotlin.system.exitProcess
 class App : KeyListener {
     val gui: AnimatedMidiGui
     val midiCtrl: MidiController?
+    val runningThread : Thread
 
     constructor(name: String, midiController: MidiController?, width: Int?, height: Int?) {
         var example: AnimatedPolyMidiCanvas
         if (width != null && height != null) {
-            example = RectAnimationAkaiPolyCanvas(width, height)
-//            example = SquareAnimationAkaiPolyCanvas(width, height)
+//            example = RectAnimationAkaiPolyCanvas(900, 600)
+            example = SquareAnimationAkaiPolyCanvas(width, height)
         } else {
-            example = RectAnimationAkaiPolyCanvas()
-//            example = SquareAnimationAkaiPolyCanvas()
+//            example = RectAnimationAkaiPolyCanvas()
+            example = SquareAnimationAkaiPolyCanvas()
         }
 
         gui = AnimatedMidiGui(example)
@@ -46,6 +45,12 @@ class App : KeyListener {
 
         midiCtrl = midiController
         setupMidi()
+
+        runningThread = object: Thread(name) {
+            override fun run() {
+                super.run()
+            }
+        }
     }
 
     fun setupMidi() {
@@ -106,7 +111,7 @@ val USAGE = "Usage: [-u] [-l] [-w width] [-h height]"
 
 fun main(args: Array<String>) {
     val name: String = "CS 537 Midterm Project"
-    val opGetter = Getopt(name, args, "ul:w:h:")
+    val opGetter = Getopt(name, args, "w:h:ul")
     var c: Int
     var width: Int? = null
     var height: Int? = null
@@ -120,7 +125,7 @@ fun main(args: Array<String>) {
             }
             'w' -> width = Integer.parseInt(opGetter.optarg)
             'h' -> height = Integer.parseInt(opGetter.optarg)
-            'u' -> println(USAGE)
+            'u' -> { println(USAGE) ; System.exit(0) }
         }
 
     } while (c != -1)
