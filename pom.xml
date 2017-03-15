@@ -147,6 +147,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>${main.class}</mainClass>
+                                    <version>${version}</version>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
@@ -157,7 +158,7 @@
                 </executions>
             </plugin>
 
-<!--            <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
@@ -166,10 +167,11 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>${main.class}</mainClass>
+                            <version>${version}</version>
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>-->
+            </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
