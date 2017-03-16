@@ -147,7 +147,6 @@
                             <archive>
                                 <manifest>
                                     <mainClass>${main.class}</mainClass>
-                                    <version>${version}</version>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
@@ -167,7 +166,6 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>${main.class}</mainClass>
-                            <version>${version}</version>
                         </manifest>
                     </archive>
                 </configuration>
