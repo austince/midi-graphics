@@ -13,6 +13,8 @@ import java.util.Iterator;
 
 /**
  * Created by austin on 3/9/17.
+ *
+ * A animation that pops in a new square and enlarges it with every pad tap.
  */
 public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
     private static final int BASE_WIDTH = 10;
@@ -35,6 +37,10 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
         this.setReceiver(buildReceiver());
     }
 
+    /**
+     * How to respond to midi input
+     * @return the midi receiver
+     */
     private Receiver buildReceiver() {
         return new AkaiMpkMiniReceiver() {
             AkaiMpkMiniReceiver clipperReceiver = SquareAnimationAkaiPolyCanvas.super.buildClipperReceiver();
@@ -46,25 +52,23 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
                 System.out.printf("key pressed: %s with value %d of %f\n", key.name(), value, percentage);
 
                 int maxWidth = getWidth() - 1;
-                int width = (int) (maxWidth * percentage);
-
                 int maxHeight = getHeight() - 1;
-                int height = (int) (maxHeight * percentage);
 
                 switch (key) {
                     case PAD_1_5:
                     case PAD_2_5:
                         // Create a new square to add
                         PolyRectangle square = new PolyRectangle(BASE_WIDTH);
-                        square.setCenter(new Point(
-                                maxWidth / 2,
-                                maxHeight / 2
-                        ));
+                        // Set a random center within 50 pixels of the center
+                        Point randCenter = new Point(
+                                (maxWidth / 2) + (int) (Math.random() * 100 - 50),
+                                (maxHeight / 2) + (int) (Math.random() * 100 - 50)
+                        );
+                        square.setCenter(randCenter);
                         square.setColor(Color.CYAN);
                         addPolyShape(square);
                         break;
                     default:
-                        System.out.println("Key has no effect!");
                 }
             }
         };

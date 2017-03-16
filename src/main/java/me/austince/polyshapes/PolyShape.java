@@ -12,9 +12,7 @@ public class PolyShape {
     private Matrix vertices;
     public Color color;
 
-    public PolyShape() {
-
-    }
+    public PolyShape() {}
 
     public PolyShape(Point[] vertices) {
         setVertices(vertices);
@@ -47,9 +45,8 @@ public class PolyShape {
     }
 
     public void setCenter(Point newCenter) {
-        // TODO
         // Translate vertices around new center
-        translate(newCenter);
+        translate(vectorFromCenter(newCenter));
     }
 
     public Point getCenter() {
@@ -62,9 +59,13 @@ public class PolyShape {
     }
 
     public Point vectorFromCenter(Point point) {
-        return new Point(this.getCenter().x - point.x, this.getCenter().y - point.y);
+        return new Point(point.x - this.getCenter().x, point.y - this.getCenter().y );
     }
 
+    /**
+     * Translates about a Point with coords x y
+     * @param adjVec
+     */
     public void translate(Point adjVec) {
         for (double[] vert : this.vertices.getArray()) {
             vert[0] += adjVec.getX();
@@ -72,31 +73,55 @@ public class PolyShape {
         }
     }
 
+    /**
+     * TODO
+     * @param rad
+     */
     public void rotate(double rad) {
         Matrix rotMatrix = TransformUtilities.rotationMatrix(rad);
         this.vertices.arrayTimesEquals(rotMatrix);
     }
 
+    /**
+     * TODO
+     * @param rad
+     */
     public void rotateAboutCenter(double rad) {
         Point center = this.getCenter();
         Matrix rotMatrix = TransformUtilities.rotationMatrixAboutPoint(rad, center.x, center.y);
         this.vertices.arrayTimesEquals(rotMatrix);
     }
 
+    /**
+     *
+     * @param scalar
+     */
     public void scale(int scalar) {
         scale((double) scalar);
     }
 
+    /**
+     * Scales the polygon
+     * @param scalar
+     */
     public void scale(double scalar) {
         this.vertices.timesEquals(scalar);
     }
 
+    /**
+     * Scales the polygon but maintains the current center
+     * @param scalar
+     */
     public void scaleAboutCenter(double scalar) {
         Point oldCenter = getCenter();
         this.vertices.timesEquals(scalar);
         setCenter(oldCenter);
     }
 
+    /**
+     * Get the X coords in int[] form
+     * @return
+     */
     public int[] getXs() {
         int[] xPoints = new int[this.vertices.getArray().length];
         for (int i = 0; i < this.vertices.getArray().length; i++) {
@@ -105,6 +130,10 @@ public class PolyShape {
         return xPoints;
     }
 
+    /**
+     * Get the Y coords in int[] form
+     * @return
+     */
     public int[] getYs() {
         int[] yPoints = new int[this.vertices.getArray().length];
         for (int i = 0; i < this.vertices.getArray().length; i++) {
@@ -113,10 +142,18 @@ public class PolyShape {
         return yPoints;
     }
 
+    /**
+     * Get the bounding Rectangle
+     * @return
+     */
     public Rectangle getBounds() {
         return this.toPolygon().getBounds();
     }
 
+    /**
+     * Convert to java.awt.Polygon
+     * @return
+     */
     public Polygon toPolygon() {
         return new Polygon(this.getXs(), this.getYs(), this.vertices.getArray().length);
     }

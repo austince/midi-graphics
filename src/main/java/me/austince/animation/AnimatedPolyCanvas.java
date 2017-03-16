@@ -20,6 +20,10 @@ public class AnimatedPolyCanvas extends PolyCanvas implements TimingTarget {
         super(width, height);
     }
 
+    /**
+     * To be overrided.
+     * @param v
+     */
     public void update(double v) {}
 
     @Override
@@ -43,11 +47,18 @@ public class AnimatedPolyCanvas extends PolyCanvas implements TimingTarget {
 //        System.out.println("AnimatedPolyCanvas.reverse");
     }
 
+    /**
+     * The basic of the animation. Updates all the polygons, clears the current screen, the reprints the image.
+     * @param animator
+     * @param v
+     */
     @Override
     public void timingEvent(Animator animator, double v) {
         this.update(v);
         // Reset the background
         this.clear();
+        // Set the buffered image with the changes to be drawn
+        this.updateImage();
         // Repaint the changes
         repaint();
     }

@@ -14,11 +14,15 @@ After `make`:
 - `java -jar target/midterm-1.0-jar-with-dependencies.jar [ARGUMENTS]`
 
 ## Application arguments
-
+- run with the `-u` for USAGE
+ 
 ## Application commands
 - Q : quit
 - If using the keyboard: 
 
+## Examples
+Press '1' for the Square Example  
+Press '2' for the Rectangle Example  
 
 ## Keyboard Support
 The examples will run without a midi keyboard

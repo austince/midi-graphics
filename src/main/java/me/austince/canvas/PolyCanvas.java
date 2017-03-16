@@ -8,9 +8,9 @@ package me.austince.canvas;
 //
 
 import me.austince.clipper.PolygonClipper;
+import me.austince.polyshapes.PolyShape;
 import me.austince.rasterizer.LineRasterizer;
 import me.austince.rasterizer.PolyRasterizer;
-import me.austince.polyshapes.PolyShape;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -20,12 +20,12 @@ import java.util.LinkedList;
  * for testing out the clipping assignment.
  */
 public class PolyCanvas extends SimpleCanvas {
-    private LinkedList<PolyShape> polyFillList;
-    private final PolygonClipper polyClipper;
-    private final PolyRasterizer polyRasterizer;
-    private final LineRasterizer lineRasterizer;
-    private Color clipWindowColor;
-    private boolean clipWindowShowing = false;
+    protected LinkedList<PolyShape> polyFillList;
+    protected final PolygonClipper polyClipper;
+    protected final PolyRasterizer polyRasterizer;
+    protected final LineRasterizer lineRasterizer;
+    protected Color clipWindowColor;
+    protected boolean clipWindowShowing = false;
 
     public PolyCanvas() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -39,6 +39,8 @@ public class PolyCanvas extends SimpleCanvas {
         this.lineRasterizer = new LineRasterizer(this.getHeight());
         this.polyClipper = new PolygonClipper(0, 0, this.getWidth() - 1, this.getHeight() - 1);
         this.polyFillList = new LinkedList<>();
+
+        updateImage();
     }
 
     public void setClipperBounds(int llx, int lly, int urx, int ury) {
@@ -73,12 +75,12 @@ public class PolyCanvas extends SimpleCanvas {
         return polyFillList;
     }
 
-    @Override
-    public void paint(Graphics g) {
-        // Pipeline: polygons -> clipper -> rasterizer
+    /**
+     * The meat of the pipeline
+     * Pipeline: polygons -> clipper -> rasterizer
+     */
+    public void updateImage() {
         // Update the image with the polygons and clip window
-
-        // draw polys
         for (PolyShape shape : this.polyFillList) {
             this.setCurColor(shape.color);
             Point[] clippedPoints = this.polyClipper.clipPolygon(shape);
@@ -104,7 +106,7 @@ public class PolyCanvas extends SimpleCanvas {
                     polyClipper.llx, polyClipper.lly,
                     polyClipper.urx, polyClipper.lly,
                     this
-                    );
+            );
             // Left
             this.lineRasterizer.drawLine(
                     polyClipper.llx, polyClipper.lly,
@@ -112,8 +114,11 @@ public class PolyCanvas extends SimpleCanvas {
                     this
             );
         }
+    }
 
-        // then do normal painting
+    @Override
+    public void paint(Graphics g) {
+        // do normal painting
         super.paint(g);
     }
 

@@ -20,22 +20,34 @@ import kotlin.system.exitProcess
  */
 
 class App : KeyListener {
-    val gui: AnimatedMidiGui
+    var gui: AnimatedMidiGui
+    val name: String
     val midiCtrl: MidiController?
-    val runningThread : Thread
+//    val runningThread : Thread
 
     constructor(name: String, midiController: MidiController?, width: Int?, height: Int?) {
         var example: AnimatedPolyMidiCanvas
         if (width != null && height != null) {
             example = RectAnimationAkaiPolyCanvas(900, 600)
-//            example = SquareAnimationAkaiPolyCanvas(width, height)
+            example = SquareAnimationAkaiPolyCanvas(width, height)
         } else {
-//            example = RectAnimationAkaiPolyCanvas()
-            example = SquareAnimationAkaiPolyCanvas()
+            example = RectAnimationAkaiPolyCanvas()
+//            example = SquareAnimationAkaiPolyCanvas()
         }
 
         gui = AnimatedMidiGui(example)
-        gui.title = name
+        this.name = name
+        this.midiCtrl = midiController
+        setup()
+//        runningThread = object: Thread(name) {
+//            override fun run() {
+//                super.run()
+//            }
+//        }
+    }
+
+    fun setup() {
+        gui.title = this.name
         gui.canvas.addKeyListener(this)
         gui.setVisible(true)
 
@@ -45,14 +57,7 @@ class App : KeyListener {
             }
         })
 
-        midiCtrl = midiController
         setupMidi()
-
-        runningThread = object: Thread(name) {
-            override fun run() {
-                super.run()
-            }
-        }
     }
 
     fun setupMidi() {
@@ -67,6 +72,20 @@ class App : KeyListener {
                 }
             }
         })
+    }
+
+    fun switchExample(exampleChar: Char) {
+        val exampleCanvas : AnimatedPolyMidiCanvas
+        when (exampleChar) {
+            '1' -> exampleCanvas = SquareAnimationAkaiPolyCanvas(gui.width, gui.height)
+//            '2' -> exampleCanvas = RectAnimationAkaiPolyCanvas(gui.width, gui.height)
+            else -> exampleCanvas = RectAnimationAkaiPolyCanvas(gui.width, gui.height)
+        }
+        gui.stop()
+        gui.close()
+        gui = AnimatedMidiGui(exampleCanvas)
+        setup()
+        start()
     }
 
     fun start() {
@@ -100,6 +119,7 @@ class App : KeyListener {
             'Q', 'q' -> this.stop()
             'P', 'p' -> this.toggle()
             'C', 'c' -> this.toggleClipWindow()
+            '1', '2' -> this.switchExample(key)
             else -> println(key)
         }
     }
