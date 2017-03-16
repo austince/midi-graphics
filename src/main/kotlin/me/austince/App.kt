@@ -4,6 +4,7 @@ package me.austince
 import gnu.getopt.Getopt
 import me.austince.animation.AnimatedMidiGui
 import me.austince.animation.AnimatedPolyMidiCanvas
+import me.austince.examples.midi.RectAnimationAkaiPolyCanvas
 import me.austince.examples.midi.SquareAnimationAkaiPolyCanvas
 import me.austince.midi.AkaiMpkMiniController
 import me.austince.midi.AkaiMpkMiniReceiver
@@ -26,8 +27,8 @@ class App : KeyListener {
     constructor(name: String, midiController: MidiController?, width: Int?, height: Int?) {
         var example: AnimatedPolyMidiCanvas
         if (width != null && height != null) {
-//            example = RectAnimationAkaiPolyCanvas(900, 600)
-            example = SquareAnimationAkaiPolyCanvas(width, height)
+            example = RectAnimationAkaiPolyCanvas(900, 600)
+//            example = SquareAnimationAkaiPolyCanvas(width, height)
         } else {
 //            example = RectAnimationAkaiPolyCanvas()
             example = SquareAnimationAkaiPolyCanvas()

@@ -1,8 +1,6 @@
 package me.austince.examples.midi;
 
 import me.austince.animation.AnimatedPolyMidiCanvas;
-import me.austince.clipper.PolygonClipper;
-import me.austince.midi.AkaiMpkMiniController;
 import me.austince.midi.AkaiMpkMiniController.AkaiKey;
 import me.austince.midi.AkaiMpkMiniReceiver;
 import me.austince.polyshapes.PolyRectangle;
@@ -53,11 +51,12 @@ public class RectAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
             public void sendKey(AkaiKey key, byte value, long l) {
                 clipperReceiver.sendKey(key, value, l);
                 switch (key) {
-                    case PAD_1_8:
-                        close();
+                    case DIAL_7:
+                        // Rotate
+                        // 0 -> should be at
+                        rect.rotateAboutCenter(.5);
                         break;
                     default:
-                        System.out.println("Key has no effect!");
                 }
             }
         };

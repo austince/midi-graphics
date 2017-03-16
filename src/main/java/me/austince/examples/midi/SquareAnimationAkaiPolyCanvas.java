@@ -1,7 +1,6 @@
 package me.austince.examples.midi;
 
 import me.austince.animation.AnimatedPolyMidiCanvas;
-import me.austince.clipper.PolygonClipper;
 import me.austince.midi.AkaiMpkMiniController;
 import me.austince.midi.AkaiMpkMiniReceiver;
 import me.austince.polyshapes.PolyRectangle;
@@ -77,7 +76,7 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
 
         while (iter.hasNext()) {
             PolyRectangle rect = (PolyRectangle) iter.next();
-            rect.scale(1 + direction.x * v * .1);
+            rect.scaleAboutCenter(1 + direction.x * v * .1);
 
             if (rect.getMaxX() > getWidth() || rect.getMinX() < 0
                     || rect.getMaxY() > getHeight() || rect.getMinY() < 0) {
