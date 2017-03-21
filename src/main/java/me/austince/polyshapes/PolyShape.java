@@ -1,7 +1,6 @@
 package me.austince.polyshapes;
 
 import Jama.Matrix;
-import org.openimaj.math.geometry.transforms.TransformUtilities;
 
 import java.awt.*;
 
@@ -74,22 +73,31 @@ public class PolyShape {
     }
 
     /**
-     * TODO
-     * @param rad
+     *
+     * @param rad the radians to rotate by
      */
     public void rotate(double rad) {
-        Matrix rotMatrix = TransformUtilities.rotationMatrix(rad);
-        this.vertices.arrayTimesEquals(rotMatrix);
+//        Matrix rotMatrix = TransformUtilities.rotationMatrix(rad);
+        double sinRad = Math.sin(rad);
+        double cosRad = Math.cos(rad);
+        double[][] rotElems = {
+                { cosRad, - sinRad },
+                { sinRad, cosRad }
+        };
+        Matrix rotMatrix = new Matrix(rotElems);
+        this.vertices = this.vertices.times(rotMatrix);
     }
 
     /**
-     * TODO
-     * @param rad
+     *
+     * @param rad the radians to rotate by
      */
     public void rotateAboutCenter(double rad) {
         Point center = this.getCenter();
-        Matrix rotMatrix = TransformUtilities.rotationMatrixAboutPoint(rad, center.x, center.y);
-        this.vertices.arrayTimesEquals(rotMatrix);
+//        Matrix rotMatrix = TransformUtilities.rotationMatrixAboutPoint(rad, center.x, center.y);
+//        this.vertices = this.vertices.times(rotMatrix);
+        this.rotate(rad);
+        setCenter(center);
     }
 
     /**
@@ -140,6 +148,19 @@ public class PolyShape {
             yPoints[i] = (int) this.vertices.getArray()[i][1];
         }
         return yPoints;
+    }
+
+    /**
+     * Get the XY Coords
+     * @return
+     */
+    public int[][] getXYs() {
+        int[][] coords = new int[this.vertices.getArray().length][2];
+        for (int i = 0; i < this.vertices.getArray().length; i++) {
+            coords[i][0] = (int) this.vertices.getArray()[i][0];
+            coords[i][1] = (int) this.vertices.getArray()[i][1];
+        }
+        return coords;
     }
 
     /**
