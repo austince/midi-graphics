@@ -13,14 +13,17 @@ import me.austince.rasterizer.LineRasterizer;
 import me.austince.rasterizer.PolyRasterizer;
 
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 
 /**
  * This is a special subclass of simpleCanvas with functionality
  * for testing out the clipping assignment.
  */
 public class PolyCanvas extends SimpleCanvas {
-    protected final LinkedList<PolyShape> polyFillList;
+    protected final CopyOnWriteArrayList<PolyShape> polyFillList;
     protected final PolygonClipper polyClipper;
     protected final PolyRasterizer polyRasterizer;
     protected final LineRasterizer lineRasterizer;
@@ -38,7 +41,7 @@ public class PolyCanvas extends SimpleCanvas {
         this.polyRasterizer = new PolyRasterizer(this.getHeight());
         this.lineRasterizer = new LineRasterizer(this.getHeight());
         this.polyClipper = new PolygonClipper(0, 0, this.getWidth() - 1, this.getHeight() - 1);
-        this.polyFillList = new LinkedList<>();
+        this.polyFillList = new CopyOnWriteArrayList<>();
 
         updateImage();
     }
@@ -71,7 +74,7 @@ public class PolyCanvas extends SimpleCanvas {
         return this.polyFillList.remove(poly);
     }
 
-    public LinkedList<PolyShape> getPolyShapes() {
+    public CopyOnWriteArrayList<PolyShape> getPolyShapes() {
         return polyFillList;
     }
 
@@ -80,10 +83,14 @@ public class PolyCanvas extends SimpleCanvas {
      * Pipeline: polygons -> clipper -> rasterizer
      */
     public void updateImage() {
-        synchronized (this.polyFillList) {
+        java.util.List<PolyShape> syncPolylist = Collections.synchronizedList(this.polyFillList);
+        synchronized (syncPolylist) {
 
             // Update the image with the polygons and clip window
-            for (PolyShape shape : this.polyFillList) {
+            Iterator<PolyShape> iter = syncPolylist.iterator();
+
+            while (iter.hasNext()) {
+                PolyShape shape = iter.next();
                 this.setCurColor(shape.color);
                 Point[] clippedPoints = this.polyClipper.clipPolygon(shape);
                 this.polyRasterizer.drawPolygon(clippedPoints, this);
