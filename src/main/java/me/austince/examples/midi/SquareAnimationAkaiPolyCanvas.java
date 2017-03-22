@@ -85,6 +85,12 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
                         square.setColor(randomColor());
                         addPolyShape(square);
                         break;
+                    case DIAL_7:
+                        // Rotate each square by a little bit
+                        for(PolyShape shape : polyFillList) {
+                            shape.rotateAboutCenter(.5);
+                        }
+                        break;
                     default:
                 }
             }
