@@ -40,6 +40,7 @@ The only currently supported keyboard is the _Akai MPK Mini_.
  
 ## Known Bugs
 - Concurrent Modification of PolyList in PolyCanvas
- 
+- Startup sometimes fails. Need to use a `Runnable` and `SwingUtilities.invokeLater`
+
 ## Kotlin
 I used Kotlin for the Driver of the examples, but the main pieces are all Java.

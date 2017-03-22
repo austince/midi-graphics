@@ -19,6 +19,15 @@ import java.util.Iterator;
 public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
     private static final int BASE_WIDTH = 10;
     private Point direction;
+    private static final Color[] SQUARE_COLORS = {
+            new Color(255, 154, 158),
+            new Color(161, 196, 253),
+            new Color(132, 250, 176),
+            new Color(254, 255, 64),
+            new Color(51, 8, 103),
+            new Color(245, 247, 250),
+            new Color(226, 209, 195),
+    };
 
     public SquareAnimationAkaiPolyCanvas() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -35,6 +44,10 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
         this.setClipperBounds(0, 0, this.getWidth() - 1, this.getHeight() - 1);
 
         this.setReceiver(buildReceiver());
+    }
+
+    private static Color randomColor() {
+        return SQUARE_COLORS[(int) (Math.random() * SQUARE_COLORS.length)];
     }
 
     /**
@@ -67,7 +80,7 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
                                 (maxHeight / 2) + (int) (Math.random() * 150 - 75)
                         );
                         square.setCenter(randCenter);
-                        square.setColor(Color.CYAN);
+                        square.setColor(randomColor());
                         addPolyShape(square);
                         break;
                     default:
