@@ -7,7 +7,7 @@
 package me.austince
 
 import gnu.getopt.Getopt
-import me.austince.animation.AnimatedMidiGui
+import me.austince.animation.AnimatedMidiFrame
 import me.austince.animation.AnimatedPolyMidiCanvas
 import me.austince.examples.midi.RectAnimationAkaiPolyCanvas
 import me.austince.examples.midi.SquareAnimationAkaiPolyCanvas
@@ -18,14 +18,15 @@ import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import javax.swing.SwingUtilities
 import kotlin.system.exitProcess
 
 
 class App : KeyListener {
-    var gui: AnimatedMidiGui
-    val name: String
-    val midiCtrl: MidiController?
-//    val runningThread : Thread
+    var gui: AnimatedMidiFrame
+    var name: String
+    var midiCtrl: MidiController?
+    val runningThread : Runnable
 
     constructor(name: String, midiController: MidiController?, width: Int?, height: Int?) {
         var example: AnimatedPolyMidiCanvas
@@ -35,15 +36,16 @@ class App : KeyListener {
             example = RectAnimationAkaiPolyCanvas()
         }
 
-        gui = AnimatedMidiGui(example)
+        gui = AnimatedMidiFrame(example)
         this.name = name
         this.midiCtrl = midiController
-        setup()
-//        runningThread = object: Thread(name) {
-//            override fun run() {
-//                super.run()
-//            }
-//        }
+
+        runningThread = Runnable {
+            println("running")
+            setup()
+            start()
+        }
+        SwingUtilities.invokeLater(runningThread)
     }
 
     fun setup() {
@@ -83,7 +85,7 @@ class App : KeyListener {
         }
         gui.stop()
         gui.close()
-        gui = AnimatedMidiGui(exampleCanvas)
+        gui = AnimatedMidiFrame(exampleCanvas)
         setup()
         start()
     }
@@ -160,5 +162,4 @@ fun main(args: Array<String>) {
             }
 
     val app = App(name, ctrl, width, height)
-    app.start()
 }

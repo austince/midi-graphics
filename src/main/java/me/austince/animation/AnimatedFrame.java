@@ -1,5 +1,5 @@
 /**
- * @file AnimatedGui.java
+ * @file AnimatedFrame.java
  * Created by austin on 3/1/17.
  */
 package me.austince.animation;
@@ -18,22 +18,22 @@ import java.util.concurrent.TimeUnit;
 /**
  * A JFrame containing a single animated poly canvas and an animator for it
  */
-public class AnimatedGui extends JFrame implements ActionListener {
+public class AnimatedFrame extends JFrame implements ActionListener {
     public AnimatedPolyCanvas canvas;
     private final Animator animator;
     protected static final int DEFAULT_HEIGHT = 600;
     protected static final int DEFAULT_WIDTH = 900;
     private static final String DEFAULT_NAME = "Austin's Animated GUI!";
 
-    public AnimatedGui() {
+    public AnimatedFrame() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
-    public AnimatedGui(int width, int height) {
+    public AnimatedFrame(int width, int height) {
         this(new AnimatedPolyCanvas(width, height));
     }
 
-    public AnimatedGui(AnimatedPolyCanvas canvas) {
+    public AnimatedFrame(AnimatedPolyCanvas canvas) {
         this.canvas = canvas;
 
         TimingSource timingSource = new SwingTimerTimingSource();

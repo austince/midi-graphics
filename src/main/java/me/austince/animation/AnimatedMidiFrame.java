@@ -3,21 +3,21 @@ package me.austince.animation;
 /**
  * Created by austin on 3/9/17.
  */
-public class AnimatedMidiGui extends AnimatedGui {
+public class AnimatedMidiFrame extends AnimatedFrame {
     /**
      * Replaces super class's canvas with a Midi listening one
      */
     public AnimatedPolyMidiCanvas canvas;
 
-    public AnimatedMidiGui() {
+    public AnimatedMidiFrame() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
-    public AnimatedMidiGui(int width, int height) {
+    public AnimatedMidiFrame(int width, int height) {
         this(new AnimatedPolyMidiCanvas(width, height));
     }
 
-    public AnimatedMidiGui(AnimatedPolyMidiCanvas canvas) {
+    public AnimatedMidiFrame(AnimatedPolyMidiCanvas canvas) {
         super(canvas);
         this.canvas = canvas;
     }
