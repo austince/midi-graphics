@@ -18,7 +18,6 @@ import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.swing.SwingUtilities
 import kotlin.system.exitProcess
 
 
@@ -26,7 +25,7 @@ class App : KeyListener {
     var gui: AnimatedMidiFrame
     var name: String
     var midiCtrl: MidiController?
-    val runningThread : Runnable
+//    val runningThread : Runnable
 
     constructor(name: String, midiController: MidiController?, width: Int?, height: Int?) {
         var example: AnimatedPolyMidiCanvas
@@ -40,12 +39,13 @@ class App : KeyListener {
         this.name = name
         this.midiCtrl = midiController
 
-        runningThread = Runnable {
-            println("running")
-            setup()
-            start()
-        }
-        SwingUtilities.invokeLater(runningThread)
+        setup()
+
+//        runningThread = Runnable {
+//            println("Running App!")
+//            setup()
+//            gui.start()
+//        }
     }
 
     fun setup() {
@@ -79,9 +79,9 @@ class App : KeyListener {
     fun switchExample(exampleChar: Char) {
         val exampleCanvas : AnimatedPolyMidiCanvas
         when (exampleChar) {
-            '1' -> exampleCanvas = SquareAnimationAkaiPolyCanvas(gui.width, gui.height)
-//            '2' -> exampleCanvas = RectAnimationAkaiPolyCanvas(gui.width, gui.height)
-            else -> exampleCanvas = RectAnimationAkaiPolyCanvas(gui.width, gui.height)
+            '1' -> exampleCanvas = SquareAnimationAkaiPolyCanvas(gui.canvas.width, gui.canvas.height)
+//            '2' -> exampleCanvas = RectAnimationAkaiPolyCanvas(gui.canvas.width, gui.canvas.height)
+            else -> exampleCanvas = RectAnimationAkaiPolyCanvas(gui.canvas.width, gui.canvas.height)
         }
         gui.stop()
         gui.close()
@@ -92,6 +92,7 @@ class App : KeyListener {
 
     fun start() {
         gui.start()
+//        SwingUtilities.invokeLater(runningThread)
     }
 
     fun stop() {
@@ -162,4 +163,5 @@ fun main(args: Array<String>) {
             }
 
     val app = App(name, ctrl, width, height)
+    app.start()
 }
