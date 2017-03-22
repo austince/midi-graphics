@@ -10,6 +10,10 @@ else
 FILENAME="CAWLEY-EDWARDS_Austin.zip"
 fi
 
+# Remake the project
+make
+make doc
+
 zip -r ${FILENAME} \
 	. \
 	-x *.git* out *.idea*
