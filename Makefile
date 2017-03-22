@@ -28,5 +28,5 @@ doc:
 clean:
 	mvn clean
 
-run:
+run: compile
 	mvn exec:java
