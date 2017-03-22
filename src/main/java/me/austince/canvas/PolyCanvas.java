@@ -13,7 +13,6 @@ import me.austince.rasterizer.LineRasterizer;
 import me.austince.rasterizer.PolyRasterizer;
 
 import java.awt.*;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -83,46 +82,42 @@ public class PolyCanvas extends SimpleCanvas {
      * Pipeline: polygons -> clipper -> rasterizer
      */
     public void updateImage() {
-        java.util.List<PolyShape> syncPolylist = Collections.synchronizedList(this.polyFillList);
-        synchronized (syncPolylist) {
+        // Update the image with the polygons and clip window
+        Iterator<PolyShape> iter = this.polyFillList.iterator();
 
-            // Update the image with the polygons and clip window
-            Iterator<PolyShape> iter = syncPolylist.iterator();
+        while (iter.hasNext()) {
+            PolyShape shape = iter.next();
+            this.setCurColor(shape.color);
+            Point[] clippedPoints = this.polyClipper.clipPolygon(shape);
+            this.polyRasterizer.drawPolygon(clippedPoints, this);
+        }
 
-            while (iter.hasNext()) {
-                PolyShape shape = iter.next();
-                this.setCurColor(shape.color);
-                Point[] clippedPoints = this.polyClipper.clipPolygon(shape);
-                this.polyRasterizer.drawPolygon(clippedPoints, this);
-            }
-
-            if (this.clipWindowShowing) {
-                this.setCurColor(this.clipWindowColor);
-                // Top
-                this.lineRasterizer.drawLine(
-                        polyClipper.llx, polyClipper.ury,
-                        polyClipper.urx, polyClipper.ury,
-                        this
-                );
-                // Right
-                this.lineRasterizer.drawLine(
-                        polyClipper.urx, polyClipper.ury,
-                        polyClipper.urx, polyClipper.lly,
-                        this
-                );
-                // Bottom
-                this.lineRasterizer.drawLine(
-                        polyClipper.llx, polyClipper.lly,
-                        polyClipper.urx, polyClipper.lly,
-                        this
-                );
-                // Left
-                this.lineRasterizer.drawLine(
-                        polyClipper.llx, polyClipper.lly,
-                        polyClipper.llx, polyClipper.ury,
-                        this
-                );
-            }
+        if (this.clipWindowShowing) {
+            this.setCurColor(this.clipWindowColor);
+            // Top
+            this.lineRasterizer.drawLine(
+                    polyClipper.llx, polyClipper.ury,
+                    polyClipper.urx, polyClipper.ury,
+                    this
+            );
+            // Right
+            this.lineRasterizer.drawLine(
+                    polyClipper.urx, polyClipper.ury,
+                    polyClipper.urx, polyClipper.lly,
+                    this
+            );
+            // Bottom
+            this.lineRasterizer.drawLine(
+                    polyClipper.llx, polyClipper.lly,
+                    polyClipper.urx, polyClipper.lly,
+                    this
+            );
+            // Left
+            this.lineRasterizer.drawLine(
+                    polyClipper.llx, polyClipper.lly,
+                    polyClipper.llx, polyClipper.ury,
+                    this
+            );
         }
     }
 

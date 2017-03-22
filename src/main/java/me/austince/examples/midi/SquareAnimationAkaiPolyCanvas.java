@@ -10,13 +10,11 @@ import org.jdesktop.core.animation.timing.Animator;
 import javax.sound.midi.Receiver;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by austin on 3/9/17.
- *
+ * <p>
  * A animation that pops in a new square and enlarges it with every pad tap.
  */
 public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
@@ -55,6 +53,7 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
 
     /**
      * How to respond to midi input
+     *
      * @return the midi receiver
      */
     private Receiver buildReceiver() {
@@ -94,24 +93,20 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
 
     @Override
     public void update(double v) {
-        // Avoid race conditions by using synchronized
-        List<PolyShape> syncPolylist = Collections.synchronizedList(this.polyFillList);
-        synchronized (this.polyFillList) {
-            Iterator<PolyShape> iter = syncPolylist.iterator();
-            ArrayList<PolyShape> toRemove = new ArrayList<>(this.polyFillList.size());
-            while (iter.hasNext()) {
-                PolyRectangle rect = (PolyRectangle) iter.next();
-                rect.scaleAboutCenter(1 + direction.x * v * .1);
+        Iterator<PolyShape> iter = this.polyFillList.iterator();
+        ArrayList<PolyShape> toRemove = new ArrayList<>(this.polyFillList.size());
+        while (iter.hasNext()) {
+            PolyRectangle rect = (PolyRectangle) iter.next();
+            rect.scaleAboutCenter(1 + direction.x * v * .1);
 
-                // If the square is outside of the canvas, remove it
-                if (rect.getMaxX() > getWidth() || rect.getMinX() < 0
-                        || rect.getMaxY() > getHeight() || rect.getMinY() < 0) {
-                    toRemove.add(rect);
-                }
+            // If the square is outside of the canvas, add it to a list to be removed
+            if (rect.getMaxX() > getWidth() || rect.getMinX() < 0
+                    || rect.getMaxY() > getHeight() || rect.getMinY() < 0) {
+                toRemove.add(rect);
             }
-
-            this.polyFillList.removeAll(toRemove);
         }
+        // Must use a chunk removeAll with CopyOnWriteArrayList
+        this.polyFillList.removeAll(toRemove);
     }
 
     @Override
