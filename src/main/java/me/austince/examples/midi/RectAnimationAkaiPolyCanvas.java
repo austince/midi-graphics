@@ -31,7 +31,7 @@ public class RectAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
         this.rect.setColor(new Color(1.0f, 0.0f, 0.0f));
         this.rect.setCenter(new Point(
                 (getWidth() - 1) / 2,
-                (getHeight() - 1) / 4
+                (getHeight() - 1) / 2
         ));
         this.addPolyShape(this.rect);
         this.setClipWindowShowing(true);

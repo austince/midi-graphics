@@ -57,12 +57,14 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
                 switch (key) {
                     case PAD_1_5:
                     case PAD_2_5:
+                        // Only allow the strongest hit
+                        if (percentage != 1) break;
                         // Create a new square to add
                         PolyRectangle square = new PolyRectangle(BASE_WIDTH);
-                        // Set a random center within 50 pixels of the center
+                        // Set a random center within 75 pixels of the center
                         Point randCenter = new Point(
-                                (maxWidth / 2) + (int) (Math.random() * 100 - 50),
-                                (maxHeight / 2) + (int) (Math.random() * 100 - 50)
+                                (maxWidth / 2) + (int) (Math.random() * 150 - 75),
+                                (maxHeight / 2) + (int) (Math.random() * 150 - 75)
                         );
                         square.setCenter(randCenter);
                         square.setColor(Color.CYAN);
@@ -76,15 +78,18 @@ public class SquareAnimationAkaiPolyCanvas extends AnimatedPolyMidiCanvas {
 
     @Override
     public void update(double v) {
-        Iterator<PolyShape> iter = getPolyShapes().iterator();
+        // Avoid race conditions by using synchronized
+        synchronized (this.polyFillList) {
+            Iterator<PolyShape> iter = getPolyShapes().iterator();
 
-        while (iter.hasNext()) {
-            PolyRectangle rect = (PolyRectangle) iter.next();
-            rect.scaleAboutCenter(1 + direction.x * v * .1);
+            while (iter.hasNext()) {
+                PolyRectangle rect = (PolyRectangle) iter.next();
+                rect.scaleAboutCenter(1 + direction.x * v * .1);
 
-            if (rect.getMaxX() > getWidth() || rect.getMinX() < 0
-                    || rect.getMaxY() > getHeight() || rect.getMinY() < 0) {
-                iter.remove();
+                if (rect.getMaxX() > getWidth() || rect.getMinX() < 0
+                        || rect.getMaxY() > getHeight() || rect.getMinY() < 0) {
+                    iter.remove();
+                }
             }
         }
     }

@@ -1,3 +1,7 @@
+/**
+ * @file AnimatedGui.java
+ * Created by austin on 3/1/17.
+ */
 package me.austince.animation;
 
 
@@ -12,7 +16,7 @@ import java.awt.event.ActionListener;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by austin on 3/1/17.
+ * A JFrame containing a single animated poly canvas and an animator for it
  */
 public class AnimatedGui extends JFrame implements ActionListener {
     public AnimatedPolyCanvas canvas;
@@ -39,7 +43,6 @@ public class AnimatedGui extends JFrame implements ActionListener {
         this.animator = new Animator.Builder()
                 // Around 60 fps
                 .setDuration(17, TimeUnit.MILLISECONDS)
-//                .setDuration(600, TimeUnit.SECONDS)
                 // Repeat forever
                 .setRepeatCount(Animator.INFINITE)
                 .setDebugName(DEFAULT_NAME + " Animator")

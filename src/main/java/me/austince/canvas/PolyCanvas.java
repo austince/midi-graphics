@@ -20,7 +20,7 @@ import java.util.LinkedList;
  * for testing out the clipping assignment.
  */
 public class PolyCanvas extends SimpleCanvas {
-    protected LinkedList<PolyShape> polyFillList;
+    protected final LinkedList<PolyShape> polyFillList;
     protected final PolygonClipper polyClipper;
     protected final PolyRasterizer polyRasterizer;
     protected final LineRasterizer lineRasterizer;
@@ -80,39 +80,42 @@ public class PolyCanvas extends SimpleCanvas {
      * Pipeline: polygons -> clipper -> rasterizer
      */
     public void updateImage() {
-        // Update the image with the polygons and clip window
-        for (PolyShape shape : this.polyFillList) {
-            this.setCurColor(shape.color);
-            Point[] clippedPoints = this.polyClipper.clipPolygon(shape);
-            this.polyRasterizer.drawPolygon(clippedPoints, this);
-        }
+        synchronized (this.polyFillList) {
 
-        if (this.clipWindowShowing) {
-            this.setCurColor(this.clipWindowColor);
-            // Top
-            this.lineRasterizer.drawLine(
-                    polyClipper.llx, polyClipper.ury,
-                    polyClipper.urx, polyClipper.ury,
-                    this
-            );
-            // Right
-            this.lineRasterizer.drawLine(
-                    polyClipper.urx, polyClipper.ury,
-                    polyClipper.urx, polyClipper.lly,
-                    this
-            );
-            // Bottom
-            this.lineRasterizer.drawLine(
-                    polyClipper.llx, polyClipper.lly,
-                    polyClipper.urx, polyClipper.lly,
-                    this
-            );
-            // Left
-            this.lineRasterizer.drawLine(
-                    polyClipper.llx, polyClipper.lly,
-                    polyClipper.llx, polyClipper.ury,
-                    this
-            );
+            // Update the image with the polygons and clip window
+            for (PolyShape shape : this.polyFillList) {
+                this.setCurColor(shape.color);
+                Point[] clippedPoints = this.polyClipper.clipPolygon(shape);
+                this.polyRasterizer.drawPolygon(clippedPoints, this);
+            }
+
+            if (this.clipWindowShowing) {
+                this.setCurColor(this.clipWindowColor);
+                // Top
+                this.lineRasterizer.drawLine(
+                        polyClipper.llx, polyClipper.ury,
+                        polyClipper.urx, polyClipper.ury,
+                        this
+                );
+                // Right
+                this.lineRasterizer.drawLine(
+                        polyClipper.urx, polyClipper.ury,
+                        polyClipper.urx, polyClipper.lly,
+                        this
+                );
+                // Bottom
+                this.lineRasterizer.drawLine(
+                        polyClipper.llx, polyClipper.lly,
+                        polyClipper.urx, polyClipper.lly,
+                        this
+                );
+                // Left
+                this.lineRasterizer.drawLine(
+                        polyClipper.llx, polyClipper.lly,
+                        polyClipper.llx, polyClipper.ury,
+                        this
+                );
+            }
         }
     }
 

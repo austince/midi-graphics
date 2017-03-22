@@ -43,20 +43,37 @@ public class PolyShape {
         return vertices;
     }
 
+    /**
+     *
+     * @param newCenter the desired new center of the polygon
+     */
     public void setCenter(Point newCenter) {
         // Translate vertices around new center
         translate(vectorFromCenter(newCenter));
     }
 
+    /**
+     *
+     * @return the center of the polygon bounds
+     */
     public Point getCenter() {
         Rectangle bounds = getBounds();
         return new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
     }
 
+    /**
+     * Sets the polygon's color to be drawn
+     * @param color
+     */
     public void setColor(Color color) {
         this.color = color;
     }
 
+    /**
+     *
+     * @param point
+     * @return a Point representing the x,y vector from point to the polygon's center
+     */
     public Point vectorFromCenter(Point point) {
         return new Point(point.x - this.getCenter().x, point.y - this.getCenter().y );
     }
@@ -128,7 +145,7 @@ public class PolyShape {
 
     /**
      * Get the X coords in int[] form
-     * @return
+     * @return the x coords
      */
     public int[] getXs() {
         int[] xPoints = new int[this.vertices.getArray().length];
@@ -140,7 +157,7 @@ public class PolyShape {
 
     /**
      * Get the Y coords in int[] form
-     * @return
+     * @return the y coords
      */
     public int[] getYs() {
         int[] yPoints = new int[this.vertices.getArray().length];
@@ -152,7 +169,7 @@ public class PolyShape {
 
     /**
      * Get the XY Coords
-     * @return
+     * @return the x,y coords
      */
     public int[][] getXYs() {
         int[][] coords = new int[this.vertices.getArray().length][2];
@@ -165,7 +182,7 @@ public class PolyShape {
 
     /**
      * Get the bounding Rectangle
-     * @return
+     * @return the bounding rectangle
      */
     public Rectangle getBounds() {
         return this.toPolygon().getBounds();
@@ -173,9 +190,16 @@ public class PolyShape {
 
     /**
      * Convert to java.awt.Polygon
-     * @return
+     * @return a awt style polygon
      */
     public Polygon toPolygon() {
-        return new Polygon(this.getXs(), this.getYs(), this.vertices.getArray().length);
+        int[] xPoints = new int[this.vertices.getArray().length];
+        int[] yPoints = new int[xPoints.length];
+
+        for (int i = 0; i < this.vertices.getArray().length; i++) {
+            xPoints[i] = (int) this.vertices.getArray()[i][0];
+            yPoints[i] = (int) this.vertices.getArray()[i][1];
+        }
+        return new Polygon(xPoints, yPoints, this.vertices.getArray().length);
     }
 }

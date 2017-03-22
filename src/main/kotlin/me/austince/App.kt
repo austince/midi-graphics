@@ -1,3 +1,8 @@
+/**
+ * @file Example runner
+ * Created by austin on 3/1/17.
+ */
+
 @file:JvmName("AppKt")
 package me.austince
 
@@ -15,9 +20,6 @@ import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import kotlin.system.exitProcess
 
-/**
- * Created by austin on 3/1/17.
- */
 
 class App : KeyListener {
     var gui: AnimatedMidiGui
@@ -28,11 +30,9 @@ class App : KeyListener {
     constructor(name: String, midiController: MidiController?, width: Int?, height: Int?) {
         var example: AnimatedPolyMidiCanvas
         if (width != null && height != null) {
-            example = RectAnimationAkaiPolyCanvas(900, 600)
-            example = SquareAnimationAkaiPolyCanvas(width, height)
+            example = RectAnimationAkaiPolyCanvas(width, height)
         } else {
             example = RectAnimationAkaiPolyCanvas()
-//            example = SquareAnimationAkaiPolyCanvas()
         }
 
         gui = AnimatedMidiGui(example)

@@ -22,10 +22,11 @@ all:
 compile:
 	mvn compile
 
+doc:
+	mvn javadoc:javadoc
+
 clean:
 	mvn clean
-
-
 
 run:
 	mvn exec:java
